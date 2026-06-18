@@ -14,18 +14,22 @@ organizzazione **agic-sandbox**. Tutto cio che si trova qui viene applicato auto
 I template si trovano in [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/) e definiscono i
 **tipi di work item** selezionabili quando si crea una nuova issue in qualsiasi repo dell'org.
 
-| Template | Tipo (Issue Type) | A cosa serve |
-|---|---|---|
-| `1-epic.md` | **Epic** | Elemento strategico di alto livello: obiettivo di business che raggruppa piu Feature |
-| `2-feature.md` | **Feature** | Elemento strategico intermedio: blocco di valore, si scompone in User Story |
-| `3-user-story.md` | **User story** | Requisito dal punto di vista dell'utente, con acceptance criteria verificabili |
-| `4-task.md` | **Task** | Attivita concreta e tracciabile, tipicamente tecnica/operativa |
-| `5-bug.md` | **Bug** | Difetto, con passi di riproduzione e campi per il triage |
-| `6-impediment.md` | **Impediment** | Ostacolo che blocca il team, con azioni e risoluzione |
-| `7-spike.md` | **Spike** | Indagine/ricerca time-boxed per ridurre incertezza |
+Sono realizzati come **Issue Forms** (`.yml`): form strutturati con campi separati, campi
+**obbligatori**, dropdown e placeholder guidati. Quando l'utente compila il form, le risposte
+vengono convertite in Markdown nel corpo dell'issue.
+
+| Template | Tipo (Issue Type) | A cosa serve | Campi obbligatori |
+|---|---|---|---|
+| `1-epic.yml` | **Epic** | Elemento strategico di alto livello: obiettivo di business che raggruppa piu Feature | Visione, Valore atteso |
+| `2-feature.yml` | **Feature** | Elemento strategico intermedio: blocco di valore, si scompone in User Story | Obiettivo, Valore di business |
+| `3-user-story.yml` | **User story** | Requisito dal punto di vista dell'utente, con acceptance criteria verificabili | Description, Acceptance criteria |
+| `4-task.yml` | **Task** | Attivita concreta e tracciabile, tipicamente tecnica/operativa | Descrizione attivita |
+| `5-bug.yml` | **Bug** | Difetto, con passi di riproduzione e campi per il triage | Repro steps, Current, Expected |
+| `6-impediment.yml` | **Impediment** | Ostacolo che blocca il team, con azioni e risoluzione | Descrizione, Azioni |
+| `7-spike.yml` | **Spike** | Indagine/ricerca time-boxed per ridurre incertezza | Obiettivo, Domande, Timebox |
 
 Ogni template imposta automaticamente il campo **Type** dell'issue tramite la chiave `type:`
-nel front-matter YAML.
+nel front-matter del form.
 
 ### Gerarchia consigliata
 
@@ -38,19 +42,33 @@ Impediment   → ostacoli trasversali che bloccano il lavoro
 
 ---
 
+## Campi org-level (sidebar issue)
+
+Alcuni attributi **non** sono nel form perche esistono come **Issue Field a livello di
+organizzazione** e si valorizzano dalla sidebar dell'issue (es. nei Bug):
+
+- **Priority**, **Severity**, **Detected in production**, **Bug categorization**, **Effort level**,
+  **Story Points**, ecc.
+
+Questo evita duplicazioni tra form e campi strutturati (utili per filtri e viste nei Projects).
+
+---
+
 ## Come si usano
 
 1. In una repo dell'organizzazione vai su **Issues → New issue**
    (oppure apri `https://github.com/agic-sandbox/<repo>/issues/new/choose`).
-2. Scegli il template corrispondente al tipo di elemento che vuoi creare.
-3. Compila le sezioni: i commenti `<!-- ... -->` sono suggerimenti e non vengono mostrati
-   nell'issue pubblicata.
+2. Scegli il tipo di elemento: si apre il **form guidato** corrispondente.
+3. Compila i campi. Quelli contrassegnati come obbligatori vanno valorizzati per poter creare l'issue.
 
 ---
 
 ## Come modificare i template
 
-- I file sono **Markdown** con front-matter YAML (`name`, `about`, `title`, `type`, `labels`).
+- I file sono **Issue Forms** in formato **YAML** (`.yml`): chiavi top-level `name`, `description`,
+  `title`, `type`, `labels`, e la lista `body` con i campi (`input`, `textarea`, `dropdown`,
+  `checkboxes`, `markdown`).
+- Sintassi ufficiale: https://docs.github.com/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms
 - Modifica i file in `.github/ISSUE_TEMPLATE/` di **questa** repository: le modifiche si
   propagano a tutte le repo dell'org.
 - **Override locale**: se una repo ha una propria cartella `.github/ISSUE_TEMPLATE/`, i suoi
