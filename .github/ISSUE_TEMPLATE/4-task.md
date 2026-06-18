@@ -1,6 +1,6 @@
 ---
 name: Task
-about: Attivit\u00e0 tecnica o operativa
+about: Attivita tecnica o operativa
 title: "[Task] "
 type: Task
 ---
