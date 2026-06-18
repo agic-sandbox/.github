@@ -1,0 +1,92 @@
+name: Bug
+description: Segnala un difetto o comportamento non atteso, con informazioni per riproduzione e triage
+title: "[Bug] "
+type: Bug
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Grazie per la segnalazione. Compila i campi sottostanti nel modo piu preciso possibile:
+        aiuta il team a riprodurre e risolvere il problema piu velocemente.
+        I campi **Severity**, **Priority**, **Detected in production** e **Bug categorization**
+        si impostano dai relativi campi dedicati nella sidebar dell'issue, non qui.
+
+  - type: textarea
+    id: repro-steps
+    attributes:
+      label: Repro steps (passi per riprodurre)
+      description: Sequenza precisa e numerata per riprodurre il problema.
+      placeholder: |
+        1. Vai su ...
+        2. Clicca su ...
+        3. Inserisci ...
+        4. Osserva l'errore
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-behaviour
+    attributes:
+      label: Current behaviour (comportamento attuale)
+      description: Cosa succede davvero. Includi messaggi di errore o log se presenti.
+      placeholder: Descrivi cosa accade ora...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behaviour
+    attributes:
+      label: Expected behaviour (comportamento atteso)
+      description: Cosa dovrebbe succedere invece.
+      placeholder: Descrivi il comportamento corretto atteso...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ambiente
+    attributes:
+      label: Ambiente
+      description: In quale ambiente si verifica il problema.
+      options:
+        - Dev
+        - Test
+        - Prod
+    validations:
+      required: false
+
+  - type: input
+    id: versione-build
+    attributes:
+      label: Versione / Build
+      description: Versione dell'applicazione o numero di build in cui si verifica.
+      placeholder: es. v2.3.1 / build 1487
+    validations:
+      required: false
+
+  - type: input
+    id: browser-device-os
+    attributes:
+      label: Browser / Device / OS
+      description: Contesto tecnico in cui si presenta il bug.
+      placeholder: es. Chrome 124 / iPhone 14 / iOS 17.4
+    validations:
+      required: false
+
+  - type: input
+    id: utenti-impattati
+    attributes:
+      label: Utenti impattati
+      description: Chi e colpito dal problema e con quale estensione.
+      placeholder: es. tutti gli utenti, solo mobile, un singolo cliente
+    validations:
+      required: false
+
+  - type: textarea
+    id: note
+    attributes:
+      label: Note
+      description: Screenshot, log, link, frequenza del problema, eventuale workaround temporaneo.
+      placeholder: Informazioni aggiuntive utili al triage...
+    validations:
+      required: false
