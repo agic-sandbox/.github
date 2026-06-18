@@ -1,0 +1,80 @@
+name: Epic
+description: Elemento di lavoro strategico che raggruppa piu feature verso un obiettivo di business
+title: "[Epic] "
+type: Epic
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Una **Epic** e un elemento di lavoro **strategico** e di alto livello: rappresenta un
+        obiettivo di business ampio, che si realizza nel tempo attraverso piu Feature. Descrive il
+        "cosa" e soprattutto il "perche", non il "come" tecnico.
+
+  - type: textarea
+    id: visione
+    attributes:
+      label: Visione / Obiettivo strategico
+      description: Quale risultato di business vogliamo ottenere? Perche e importante ora?
+      placeholder: Descrivi l'obiettivo strategico di alto livello...
+    validations:
+      required: true
+
+  - type: textarea
+    id: valore
+    attributes:
+      label: Valore atteso
+      description: Quale valore porta a utenti, clienti o organizzazione?
+      placeholder: Descrivi il valore atteso...
+    validations:
+      required: true
+
+  - type: textarea
+    id: in-scope
+    attributes:
+      label: In scope
+      description: Cosa rientra nell'ambito di questa Epic.
+      placeholder: |
+        - ...
+        - ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: out-scope
+    attributes:
+      label: Out of scope
+      description: Cosa esplicitamente NON rientra.
+      placeholder: |
+        - ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: feature-collegate
+    attributes:
+      label: Feature collegate
+      description: Elenca le Feature che compongono questa Epic (collegabili come sub-issue).
+      placeholder: |
+        - [ ] Feature 1
+        - [ ] Feature 2
+    validations:
+      required: false
+
+  - type: textarea
+    id: kpi
+    attributes:
+      label: Metriche di successo / KPI
+      description: Come misuriamo se l'Epic ha raggiunto l'obiettivo?
+      placeholder: |
+        - ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: note
+    attributes:
+      label: Note / Rischi / Dipendenze
+      placeholder: Informazioni aggiuntive, rischi o dipendenze rilevanti...
+    validations:
+      required: false
