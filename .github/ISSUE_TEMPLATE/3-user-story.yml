@@ -1,0 +1,52 @@
+name: User story
+description: Requisito espresso dal punto di vista dell'utente, con criteri di accettazione verificabili
+title: "[User story] "
+type: User story
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Una **User Story** descrive un requisito dal punto di vista dell'utente. Usa il formato
+        "ruolo - obiettivo - beneficio" e definisci criteri di accettazione verificabili.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: |
+        Struttura tipica (role-goal-benefit):
+        "Come [ruolo], voglio [azione], cosi che [beneficio]".
+      value: |
+        Come
+        voglio
+        cosi che
+      placeholder: |
+        Come cliente registrato
+        voglio salvare i prodotti in una wishlist
+        cosi che possa ritrovarli e acquistarli in seguito
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: |
+        Condizioni verificabili che rendono la story "accettata". Usa una checklist
+        (formato consigliato Given / When / Then).
+      value: |
+        - [ ] **Dato** che ..., **quando** ..., **allora** ...
+        - [ ] **Dato** che ..., **quando** ..., **allora** ...
+        - [ ] Sono gestiti i casi di errore: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: note
+    attributes:
+      label: Note / Dipendenze
+      description: Vincoli, dipendenze da altre story, mockup, link a documentazione.
+      placeholder: Informazioni aggiuntive...
+    validations:
+      required: false
