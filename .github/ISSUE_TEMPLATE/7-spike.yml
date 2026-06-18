@@ -1,0 +1,68 @@
+name: Spike
+description: Indagine o ricerca time-boxed per ridurre incertezza tecnica o funzionale
+title: "[Spike] "
+type: Spike
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Uno **Spike** e un'attivita di **ricerca/indagine a tempo determinato (time-boxed)**: serve
+        a ridurre l'incertezza, valutare opzioni o acquisire conoscenza prima di stimare o
+        realizzare altro lavoro. L'output non e codice di produzione, ma una conoscenza/decisione.
+
+  - type: textarea
+    id: obiettivo
+    attributes:
+      label: Obiettivo dello spike
+      description: Quale incertezza vogliamo risolvere? Perche e necessario indagare prima di procedere?
+      placeholder: Descrivi l'obiettivo dell'indagine...
+    validations:
+      required: true
+
+  - type: textarea
+    id: domande
+    attributes:
+      label: Domande a cui rispondere
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+
+  - type: input
+    id: timebox
+    attributes:
+      label: Timebox (durata massima)
+      description: Tempo massimo dedicato. Lo spike si chiude allo scadere, con quanto appreso.
+      placeholder: es. 2 giorni
+    validations:
+      required: true
+
+  - type: textarea
+    id: approccio
+    attributes:
+      label: Approccio / Cosa proveremo
+      description: Come conduciamo l'indagine (spike tecnico, proof of concept, ricerca, confronto opzioni).
+      placeholder: Descrivi l'approccio...
+    validations:
+      required: false
+
+  - type: textarea
+    id: esito
+    attributes:
+      label: Esito / Raccomandazione
+      description: Da compilare a fine spike - cosa abbiamo scoperto e quale decisione/azione ne consegue.
+      placeholder: Risultato dell'indagine e raccomandazione...
+    validations:
+      required: false
+
+  - type: textarea
+    id: prossimi-passi
+    attributes:
+      label: Prossimi passi
+      description: Story/Task generati dallo spike.
+      placeholder: |
+        - [ ] ...
+    validations:
+      required: false
