@@ -1,12 +1,12 @@
 ---
 name: Bug
-about: Difetto o comportamento non atteso
+about: "Difetto o comportamento non atteso"
 title: "[Bug] "
 type: Bug
 ---
 
 ## Descrizione
 
-<!-- Descrivi qui il Bug -->
+<!-- Descrivi qui l'elemento di tipo Bug -->
 
 ## Note
