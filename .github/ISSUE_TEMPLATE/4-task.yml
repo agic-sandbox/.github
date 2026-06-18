@@ -1,0 +1,60 @@
+name: Task
+description: Attivita concreta e tracciabile, tipicamente tecnica o operativa
+title: "[Task] "
+type: Task
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Un **Task** serve a **tracciare un'attivita** specifica e concreta da svolgere. E l'unita
+        operativa di lavoro: di solito tecnica (sviluppo, configurazione, test) o organizzativa, e
+        spesso figlia di una User Story o di una Feature.
+
+  - type: textarea
+    id: descrizione
+    attributes:
+      label: Descrizione attivita
+      description: Cosa va fatto, in modo concreto e azionabile.
+      placeholder: Descrivi l'attivita da svolgere...
+    validations:
+      required: true
+
+  - type: input
+    id: riferimento
+    attributes:
+      label: Story / Feature di riferimento
+      description: Collega l'elemento padre, se presente.
+      placeholder: es. #20
+    validations:
+      required: false
+
+  - type: textarea
+    id: checklist
+    attributes:
+      label: Checklist operativa
+      description: Passi concreti per completare il task.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: Definition of Done
+      value: |
+        - [ ] Attivita realizzata
+        - [ ] Verificata / testata
+        - [ ] Eventuale documentazione aggiornata
+    validations:
+      required: false
+
+  - type: textarea
+    id: note
+    attributes:
+      label: Note
+      placeholder: Informazioni aggiuntive...
+    validations:
+      required: false
