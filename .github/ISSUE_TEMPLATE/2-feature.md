@@ -1,12 +1,12 @@
 ---
 name: Feature
-about: Funzionalita che fornisce valore all'utente
+about: "Funzionalita che fornisce valore all utente"
 title: "[Feature] "
 type: Feature
 ---
 
 ## Descrizione
 
-<!-- Descrivi qui il Feature -->
+<!-- Descrivi qui l'elemento di tipo Feature -->
 
 ## Note
