@@ -13,14 +13,32 @@ Documentazione operativa per gestire **progetti, template e issue** nell'organiz
 
 ## Architettura in breve
 
+```mermaid
+flowchart TD
+    ORG["Organizzazione agic-sandbox"]
+
+    ORG --> TYPES["Issue Types<br/>(Settings)"]
+    ORG --> GH["Repo .github (public)"]
+    ORG --> TPL["Project template<br/>agic_scrum_template"]
+    ORG --> WORK["Progetti di lavoro<br/>(1 per repo/cliente)"]
+
+    TYPES --> T1["Epic · Feature · User story<br/>Task · Bug · Impediment · Spike"]
+
+    GH --> FORMS[".github/ISSUE_TEMPLATE/<br/>7 Issue Form .yml"]
+    GH --> DOCS["docs/<br/>queste guide"]
+
+    TPL -.->|copyProjectV2<br/>viste + campi| WORK
+    FORMS -.->|default org-wide| WORK
+    TYPES -.->|tipi disponibili| WORK
+
+    classDef org fill:#1f6feb,stroke:#0b3d91,color:#fff;
+    classDef node fill:#eef3fb,stroke:#1f6feb,color:#0b1f44;
+    class ORG org;
+    class TYPES,GH,TPL,WORK,T1,FORMS,DOCS node;
 ```
-Organizzazione agic-sandbox
-├── Issue Types (Settings)         → Epic, Feature, User story, Task, Bug, Impediment, Spike
-├── Repo .github (public)          → issue template (.yml) + queste guide
-│   └── .github/ISSUE_TEMPLATE/    → 7 Issue Form, uno per tipo
-├── Project template "agic_scrum_template"  → 7 viste + campi preconfigurati
-└── Progetti di lavoro (1 per repo/cliente) → clonati dal template
-```
+
+> La copia del template (`copyProjectV2`) e i default della repo `.github` sono **una-tantum
+> alla creazione** del progetto: vedi i limiti nella tabella sotto.
 
 ## Concetti chiave (e i loro limiti)
 
@@ -37,3 +55,4 @@ Organizzazione agic-sandbox
 - Creare un nuovo progetto di lavoro → vedi [Guida 02](02-creazione-progetti-da-template.md)
 - Capire i tipi di issue e i form → vedi [Guida 01](01-issue-types-e-template.md)
 - Configurare board, sprint e gerarchia → vedi [Guida 03](03-viste-filtri-scrum.md)
+
