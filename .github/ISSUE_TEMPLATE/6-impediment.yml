@@ -1,0 +1,68 @@
+name: Impediment
+description: Ostacolo che blocca o rallenta il team, con azioni intraprese e risoluzione
+title: "[Impediment] "
+type: Impediment
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Un **Impediment** rappresenta un ostacolo che blocca o rallenta il lavoro del team e va
+        reso visibile per essere rimosso il prima possibile.
+
+  - type: textarea
+    id: descrizione
+    attributes:
+      label: Descrizione
+      description: Qual e l'ostacolo? Chi/cosa blocca? Da quando? Qual e l'impatto sul team o sullo sprint?
+      placeholder: Descrivi l'ostacolo e il suo impatto...
+    validations:
+      required: true
+
+  - type: textarea
+    id: azioni
+    attributes:
+      label: Azioni
+      description: Cosa e stato fatto o si intende fare per rimuovere l'ostacolo (responsabile e data).
+      placeholder: |
+        - [ ] Azione — Responsabile — Data
+        - [ ] ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: risoluzione
+    attributes:
+      label: Risoluzione
+      description: Come e stato risolto (o perche e ancora aperto). Esito finale.
+      placeholder: Descrivi la risoluzione o lo stato attuale...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: stato
+    attributes:
+      label: Stato
+      options:
+        - Aperto
+        - In gestione
+        - Risolto
+    validations:
+      required: false
+
+  - type: input
+    id: responsabile
+    attributes:
+      label: Responsabile rimozione
+      placeholder: es. Mario Rossi / Team Backend
+    validations:
+      required: false
+
+  - type: input
+    id: elementi-bloccati
+    attributes:
+      label: Elementi bloccati
+      description: Story/Task impattati dall'ostacolo.
+      placeholder: es. #20, #26
+    validations:
+      required: false
