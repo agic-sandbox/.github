@@ -1,6 +1,6 @@
 ---
 name: Epic
-about: Grande obiettivo di valore che raggruppa pi\u00f9 feature
+about: Grande obiettivo di valore che raggruppa piu feature
 title: "[Epic] "
 type: Epic
 ---
