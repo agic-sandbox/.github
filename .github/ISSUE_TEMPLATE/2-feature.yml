@@ -1,0 +1,68 @@
+name: Feature
+description: Elemento di lavoro strategico che fornisce un blocco di valore all'utente o al business
+title: "[Feature] "
+type: Feature
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Una **Feature** e un elemento di lavoro **strategico** intermedio: rappresenta una capacita
+        o funzionalita significativa che fornisce valore tangibile. Sta sotto una Epic e si scompone
+        in piu User Story. Descrive il "cosa" e il "perche".
+
+  - type: textarea
+    id: obiettivo
+    attributes:
+      label: Obiettivo della Feature
+      description: Quale capacita introduce? Quale problema risolve?
+      placeholder: Descrivi l'obiettivo della feature...
+    validations:
+      required: true
+
+  - type: textarea
+    id: valore
+    attributes:
+      label: Valore di business
+      description: Perche questa Feature e importante? Che impatto ha?
+      placeholder: Descrivi il valore di business...
+    validations:
+      required: true
+
+  - type: input
+    id: epic-riferimento
+    attributes:
+      label: Epic di riferimento
+      description: Collega l'Epic padre, se presente.
+      placeholder: es. #12
+    validations:
+      required: false
+
+  - type: textarea
+    id: user-story
+    attributes:
+      label: User Story previste
+      description: Elenca le Story in cui si scompone (collegabili come sub-issue).
+      placeholder: |
+        - [ ] Story 1
+        - [ ] Story 2
+    validations:
+      required: false
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: Criteri di completamento (Definition of Done)
+      description: Quando consideriamo la Feature "fatta"?
+      placeholder: |
+        - [ ] ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: note
+    attributes:
+      label: Note / Dipendenze / Rischi
+      placeholder: Informazioni aggiuntive, dipendenze o rischi...
+    validations:
+      required: false
