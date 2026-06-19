@@ -91,6 +91,9 @@ Questo evita duplicazioni tra form e campi strutturati (utili per filtri e viste
 I tipi e i template sono indipendenti dalle board. Per la gestione Scrum (sprint, backlog,
 stati, story points) si usa il Project template dell'organizzazione, applicato alle singole repo.
 
+Un'automazione (**Project Alerts**) aggiorna inoltre un campo `🚨 Alert` sugli item dei Project
+in base a 8 regole (item scaduti, bug critici, impediment, ecc.): vedi [docs/04](docs/04-project-alerts.md).
+
 ---
 
 ## Documentazione dei processi
@@ -100,3 +103,4 @@ Guide operative su progetti, template e issue: vedi [docs/](docs/README.md).
 - [Issue Types e Template](docs/01-issue-types-e-template.md)
 - [Creazione progetti da template](docs/02-creazione-progetti-da-template.md)
 - [Viste, filtri e Scrum](docs/03-viste-filtri-scrum.md)
+- [Project Alerts (automazione)](docs/04-project-alerts.md)
