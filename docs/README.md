@@ -28,12 +28,12 @@ flowchart TD
 
     GH --> FORMS[".github/ISSUE_TEMPLATE/<br/>7 Issue Form .yml"]
     GH --> DOCS["docs/<br/>queste guide"]
-    GH --> ALERTS["workflow Project Alerts<br/>(campo 🚨 Alert)"]
+    GH --> ALERTS["workflow automazioni<br/>(Alert · Digest · Velocity)"]
 
     TPL -.->|copyProjectV2<br/>viste + campi| WORK
     FORMS -.->|default org-wide| WORK
     TYPES -.->|tipi disponibili| WORK
-    ALERTS -.->|aggiorna alert via API| WORK
+    ALERTS -.->|aggiornano board, status update, velocity| WORK
 
     classDef org fill:#1f6feb,stroke:#0b3d91,color:#fff;
     classDef node fill:#eef3fb,stroke:#1f6feb,color:#0b1f44;
@@ -62,4 +62,5 @@ flowchart TD
 - Capire i tipi di issue e i form → vedi [Guida 01](01-issue-types-e-template.md)
 - Configurare board, sprint e gerarchia → vedi [Guida 03](03-viste-filtri-scrum.md)
 - Capire gli alert automatici sugli item → vedi [Guida 04](04-project-alerts.md)
+- Digest settimanale e metriche di velocity → vedi [Guida 05](05-automazioni-processo.md)
 
