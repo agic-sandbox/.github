@@ -234,8 +234,10 @@ export function isoDate(d) { return d.toISOString().slice(0, 10); }
 
 // ---- README del progetto: gestione blocchi marcati (idempotente) ----
 // Inserisce o aggiorna un blocco delimitato da marker HTML nel README del project,
-// preservando il resto. key identifica il blocco (es. "automazioni", "velocity").
-export async function upsertReadmeBlock(projectId, key, block) {
+// preservando il resto. key identifica il blocco (es. "velocity", "project-alerts").
+// opts.beforeKey: se il blocco non esiste ancora, lo inserisce PRIMA di quel marker
+// (per controllare l'ordine delle sezioni nel README).
+export async function upsertReadmeBlock(projectId, key, block, opts = {}) {
   const start = `<!-- ${key}:start -->`;
   const end = `<!-- ${key}:end -->`;
   const wrapped = `${start}\n${block}\n${end}`;
@@ -243,15 +245,26 @@ export async function upsertReadmeBlock(projectId, key, block) {
   const data = await gql(`query($id: ID!) { node(id: $id) { ... on ProjectV2 { readme } } }`, { id: projectId });
   const existing = data.node.readme || '';
 
+  // 1) rimuovi eventuale blocco esistente con questa key (per riposizionarlo correttamente)
+  let stripped = existing;
+  const s0 = stripped.indexOf(start);
+  const e0 = stripped.indexOf(end);
+  if (s0 !== -1 && e0 !== -1) stripped = stripped.slice(0, s0) + stripped.slice(e0 + end.length);
+
+  // 2) calcola la posizione: prima di beforeKey se presente, altrimenti in coda
+  const beforeMark = opts.beforeKey ? `<!-- ${opts.beforeKey}:start -->` : null;
+  const idx = beforeMark ? stripped.indexOf(beforeMark) : -1;
   let next;
-  const s = existing.indexOf(start);
-  const e = existing.indexOf(end);
-  if (s !== -1 && e !== -1) {
-    next = existing.slice(0, s) + wrapped + existing.slice(e + end.length);
+  if (idx !== -1) {
+    const head = stripped.slice(0, idx).replace(/\s+$/, '');
+    const tail = stripped.slice(idx).replace(/^\s+/, '');
+    next = (head ? head + '\n\n' : '') + wrapped + '\n\n' + tail;
   } else {
-    const base = existing.replace(/\s+$/, '');
+    const base = stripped.replace(/\s+$/, '');
     next = base ? `${base}\n\n${wrapped}\n` : `${wrapped}\n`;
   }
+  next = next.replace(/\n{3,}/g, '\n\n');
+
   if (next === existing) return false;
   await gql(`mutation($p: ID!, $r: String!) { updateProjectV2(input: { projectId: $p, readme: $r }) { projectV2 { id } } }`, { p: projectId, r: next });
   return true;
@@ -261,4 +274,35 @@ export async function upsertReadmeBlock(projectId, key, block) {
 export function bar(pct, width = 16) {
   const filled = Math.round((Math.max(0, Math.min(100, pct)) / 100) * width);
   return '█'.repeat(filled) + '░'.repeat(width - filled);
+}
+
+// ---- Velocity per iteration (condiviso tra digest e metriche) ----
+export function velocityByIteration(items, fields) {
+  const iterMap = new Map();
+  for (const it of allIterations(fields)) iterMap.set(it.id, it);
+
+  const byIter = new Map();
+  for (const it of items) {
+    if (!it.iterationId) continue;
+    if (!byIter.has(it.iterationId)) byIter.set(it.iterationId, []);
+    byIter.get(it.iterationId).push(it);
+  }
+
+  const rows = [];
+  for (const [iterId, group] of byIter) {
+    const meta = iterMap.get(iterId);
+    if (!meta) continue;
+    let committedSp = 0, completedSp = 0, committed = 0, completed = 0;
+    for (const it of group) {
+      committed++;
+      const sp = typeof it.storyPoints === 'number' ? it.storyPoints : 0;
+      committedSp += sp;
+      if (isDone(it)) { completed++; completedSp += sp; }
+    }
+    const pct = committedSp > 0 ? Math.round((completedSp / committedSp) * 100)
+      : (committed > 0 ? Math.round((completed / committed) * 100) : 0);
+    rows.push({ id: iterId, title: meta.title, start: meta.start, end: meta.end, committedSp, completedSp, committed, completed, pct });
+  }
+  rows.sort((a, b) => a.start - b.start);
+  return rows;
 }

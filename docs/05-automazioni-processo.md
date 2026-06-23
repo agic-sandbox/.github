@@ -20,7 +20,8 @@ configurazione per progetto: i nuovi progetti vengono coperti automaticamente.
 - **File**: `scripts/project-digest.mjs` + `.github/workflows/project-digest.yml`.
 - **Cosa fa**: per ogni progetto Scrum pubblica una **Project status update** con:
   - sprint corrente (item e Story Points completati su totali, % completamento);
-  - conteggio di scaduti, in scadenza, impediment aperti, item in corso.
+  - conteggio di scaduti, in scadenza, impediment aperti, item in corso;
+  - mini-tabella **velocity** degli ultimi sprint.
 - **Stato** (badge della status update) derivato automaticamente:
   - `OFF_TRACK` se ci sono item scaduti;
   - `AT_RISK` se ci sono impediment aperti o scadenze imminenti;
@@ -33,9 +34,9 @@ configurazione per progetto: i nuovi progetti vengono coperti automaticamente.
 - **Cosa calcola**, per ogni iteration: Story Points previsti/completati, item previsti/completati,
   % completamento; velocity media (SP completati) sugli ultimi sprint.
 - **Output (sempre due forme):**
-  1. **Visivo** — sezione **📈 Velocity sprint** nel **README del progetto**, con barre proporzionali e tabella.
+  1. **Visivo** — sezione **📈 Velocity** nel **README del progetto**, con barre proporzionali e tabella.
   2. **Dati grezzi** — file **`metrics/velocity.csv`** committato nel repo (storicizzabile, importabile in Excel/BI).
-- Il README riporta anche il link diretto al CSV.
+- Il README riporta anche il link diretto al CSV. La stessa velocity compare in forma sintetica nel digest settimanale.
 
 ### Grafici interattivi (Insights) — setup UI una-tantum
 Le **Insights** dei Project non sono configurabili via API: si impostano dalla UI (e vengono
@@ -56,8 +57,9 @@ ereditate dai progetti creati dal template). Per una velocity chart:
 
 ## Descrizione nei progetti
 Il comando `setup` (vedi [guida 04](04-project-alerts.md)) scrive nel README di ogni progetto una
-sezione **🤖 Automazioni di processo** che riassume Alert, Digest e Velocity, cosi chi apre il
-progetto sa cosa significano i badge, gli status update e la tabella velocity.
+sezione **⚙️ Automazioni & impostazioni** che riassume Alert, Digest e Velocity con i link a queste
+guide (che fanno da "sotto-pagine" di dettaglio). Il README segue il flusso: info progetto → 📈 Velocity
+→ ⚙️ impostazioni, per restare leggibile.
 
 ## Limiti noti
 - Insights/viste: gestibili **solo da UI**, nessuna API.

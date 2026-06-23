@@ -80,40 +80,19 @@ const ALERT_DEFS = [
 ];
 
 // Sezione informativa inserita nel README del progetto da "setup".
-// Descrive a chi lavora sul progetto le automazioni di processo attive.
+// Sintesi delle automazioni + impostazioni; i dettagli stanno nelle guide docs (sotto-pagine).
 const README_MARK_START = '<!-- project-alerts:start -->';
 const README_MARK_END = '<!-- project-alerts:end -->';
 const ALERT_README_BLOCK = [
-  '## 🤖 Automazioni di processo',
+  '## ⚙️ Automazioni & impostazioni',
   '',
-  'Questo progetto è gestito da automazioni centralizzate (girano nel repo `.github`, nessuna azione manuale).',
+  '_Automazioni centralizzate (repo `.github`): nessuna azione manuale. Dettagli nelle guide collegate._',
   '',
-  '### 🚨 Alert automatici',
-  'Ogni item può mostrare un badge **🚨 Alert** colorato quando richiede attenzione. Calcolato 2 volte al giorno;',
-  'ogni item riceve **un solo alert**, il più grave tra le regole che scattano:',
+  '- 🚨 **Alert** — badge colorato sugli item che richiedono attenzione (scaduti, bug critici, impediment, scadenze, item fermi…). Regole complete e attivazione: **[guida Alert](https://github.com/agic-sandbox/.github/blob/main/docs/04-project-alerts.md)**.',
+  '- 🗓️ **Digest settimanale** — riepilogo dello sprint (On track / At risk / Off track) pubblicato ogni lunedì in *Status updates* (menu `···` del progetto).',
+  '- 📈 **Velocity** — vedi la sezione **📈 Velocity** qui sopra · grafici interattivi nella scheda **Insights**. Dettagli: **[guida Processo](https://github.com/agic-sandbox/.github/blob/main/docs/05-automazioni-processo.md)**.',
   '',
-  '| Alert | Quando scatta |',
-  '|---|---|',
-  '| 🔴 Scaduto | Target date passata e item non chiuso |',
-  '| 🔴 Bug critico aperto | Bug con Severity critica non ancora preso in carico |',
-  '| 🔴 Impediment bloccante | Impediment aperto da oltre 3 giorni |',
-  '| 🟠 In scadenza | Target date entro 3 giorni |',
-  '| 🟠 Fermo | In Progress senza aggiornamenti da oltre 5 giorni |',
-  '| 🟠 Priorita alta in backlog | Priority alta ferma in backlog da oltre 5 giorni |',
-  '| 🟡 Non pronto per sprint | Item nello sprint senza Story Points o assegnatario |',
-  '| 🟡 Avanzamento insufficiente | Epic/Feature in ritardo a sprint quasi concluso |',
-  '',
-  'Per vederli: menu `...` della vista -> *Fields* -> attiva **🚨 Alert**, oppure *Group by* -> **🚨 Alert**, oppure filtra con `-no:"🚨 Alert"`.',
-  '',
-  '### 🗓️ Digest settimanale',
-  'Ogni lunedì viene pubblicata una **Project status update** (On track / At risk / Off track) con il riepilogo di sprint,',
-  'scaduti, in scadenza, impediment e item in corso. La trovi nel menu del progetto sotto *Status updates*.',
-  '',
-  '### 📈 Velocity sprint',
-  'La sezione **📈 Velocity sprint** (più in basso in questo README) riporta velocity e completamento per sprint,',
-  'aggiornata automaticamente. Dati grezzi in CSV e grafici interattivi nella scheda **Insights**.',
-  '',
-  '📖 Dettagli e configurazione: [Alert](https://github.com/agic-sandbox/.github/blob/main/docs/04-project-alerts.md) · [Digest e Metriche](https://github.com/agic-sandbox/.github/blob/main/docs/05-automazioni-processo.md).',
+  '> Per vedere gli alert sul board: vista → `···` → *Fields* → **🚨 Alert**, oppure *Group by* → **🚨 Alert**, oppure filtro `-no:"🚨 Alert"`.',
 ].join('\n');
 
 // ===================== GraphQL helper =====================

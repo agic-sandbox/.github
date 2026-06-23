@@ -14,7 +14,7 @@
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import {
-  CONFIG, listProjects, getFields, getAllItems, isDone, allIterations,
+  CONFIG, listProjects, getFields, getAllItems, velocityByIteration,
   isoDate, startOfTodayUTC, upsertReadmeBlock, bar, fail,
 } from './lib/projects.mjs';
 
@@ -34,53 +34,20 @@ function csvCell(v) {
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
-function computeIterations(items, fields) {
-  const iterMap = new Map();
-  for (const it of allIterations(fields)) iterMap.set(it.id, it);
-
-  const byIter = new Map();
-  for (const it of items) {
-    if (!it.iterationId) continue;
-    if (!byIter.has(it.iterationId)) byIter.set(it.iterationId, []);
-    byIter.get(it.iterationId).push(it);
-  }
-
-  const rows = [];
-  for (const [iterId, group] of byIter) {
-    const meta = iterMap.get(iterId);
-    if (!meta) continue; // iteration non piu in config
-    let committedSp = 0, completedSp = 0, committed = 0, completed = 0;
-    for (const it of group) {
-      committed++;
-      const sp = typeof it.storyPoints === 'number' ? it.storyPoints : 0;
-      committedSp += sp;
-      if (isDone(it)) { completed++; completedSp += sp; }
-    }
-    const pct = committedSp > 0 ? Math.round((completedSp / committedSp) * 100)
-      : (committed > 0 ? Math.round((completed / committed) * 100) : 0);
-    rows.push({ title: meta.title, start: meta.start, end: meta.end, committedSp, completedSp, committed, completed, pct });
-  }
-  rows.sort((a, b) => a.start - b.start);
-  return rows;
-}
-
 function buildReadmeBlock(rows) {
   const recent = rows.slice(-SPRINTS_SHOWN);
   const completed = recent.filter(r => r.completedSp > 0);
   const avgVelocity = completed.length ? Math.round(completed.reduce((s, r) => s + r.completedSp, 0) / completed.length) : 0;
 
   const lines = [];
-  lines.push('## 📈 Velocity sprint');
+  lines.push('## 📈 Velocity');
+  lines.push(`_Velocity media (SP): **${avgVelocity}** · agg. ${isoDate(startOfTodayUTC())} · [grafici Insights](https://github.com/agic-sandbox/.github/blob/main/docs/05-automazioni-processo.md) · [CSV](${CSV_LINK})_`);
   lines.push('');
-  lines.push(`_Aggiornato automaticamente il ${isoDate(startOfTodayUTC())} — velocity media (SP completati): **${avgVelocity}**._`);
-  lines.push('');
-  lines.push('| Sprint | Completamento | SP (fatti/previsti) | Item |');
+  lines.push('| Sprint | Avanzamento | SP | Item |');
   lines.push('|---|---|---|---|');
   for (const r of recent) {
-    lines.push(`| ${r.title} | \`${bar(r.pct)}\` ${r.pct}% | ${r.completedSp}/${r.committedSp} | ${r.completed}/${r.committed} |`);
+    lines.push(`| ${r.title} | \`${bar(r.pct, 12)}\` ${r.pct}% | ${r.completedSp}/${r.committedSp} | ${r.completed}/${r.committed} |`);
   }
-  lines.push('');
-  lines.push(`📊 Dati grezzi (CSV): [metrics/velocity.csv](${CSV_LINK}) · grafici interattivi nella scheda **Insights** del progetto (vedi [guida 05](https://github.com/agic-sandbox/.github/blob/main/docs/05-automazioni-processo.md)).`);
   return lines.join('\n');
 }
 
@@ -96,7 +63,7 @@ function buildReadmeBlock(rows) {
     const fields = await getFields(p.id);
     if (!fields[CONFIG.fieldNames.iteration] || !fields[CONFIG.fieldNames.status]) { skipped++; continue; }
     const items = await getAllItems(p.id);
-    const rows = computeIterations(items, fields);
+    const rows = velocityByIteration(items, fields);
     if (rows.length === 0) { skipped++; continue; }
 
     for (const r of rows) {
@@ -105,7 +72,8 @@ function buildReadmeBlock(rows) {
     }
 
     if (!dryRun) {
-      const changed = await upsertReadmeBlock(p.id, 'velocity', buildReadmeBlock(rows));
+      // velocity inserita PRIMA del blocco impostazioni, cosi l'ordine e: progetto -> velocity -> impostazioni
+      const changed = await upsertReadmeBlock(p.id, 'velocity', buildReadmeBlock(rows), { beforeKey: 'project-alerts' });
       console.log(`  README #${p.number}: ${changed ? 'aggiornato' : 'invariato'}`);
     }
     updated++;
