@@ -100,6 +100,10 @@ Varianti utili:
   ```
   poi ricreare le viste in UI.
 
+`setup` inoltre inserisce/aggiorna nel **README del progetto** una sezione "🚨 Alert automatici"
+(regole-trigger e come visualizzarli), cosi chi lavora sul progetto sa da dove arrivano gli alert.
+L'operazione e idempotente e preserva il resto del README.
+
 ## Configurazione delle regole
 
 Soglie, stati, valori e mappatura tipi sono nel blocco `CONFIG` in cima a
