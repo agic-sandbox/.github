@@ -12,7 +12,8 @@
  */
 import {
   CONFIG, listProjects, getFields, getAllItems, isType, isDone,
-  currentIteration, startOfTodayUTC, dateOnly, daysUntil, isoDate, gql, fail,
+  currentIteration, startOfTodayUTC, dateOnly, daysUntil, isoDate,
+  velocityByIteration, bar, gql, fail,
 } from './lib/projects.mjs';
 
 const dryRun = process.argv.includes('--dry-run');
@@ -53,7 +54,7 @@ function deriveStatus(ind) {
   return 'ON_TRACK';
 }
 
-function buildBody(ind) {
+function buildBody(ind, velocityRows) {
   const lines = [];
   lines.push(`**Digest settimanale di processo** · ${isoDate(startOfTodayUTC())}`);
   lines.push('');
@@ -73,7 +74,17 @@ function buildBody(ind) {
   else if (ind.impediments > 0 || ind.dueSoon > 0) lines.push('> ⚠️ Impediment o scadenze imminenti: stato **At risk**.');
   else lines.push('> ✅ Nessuna criticità rilevata: stato **On track**.');
   lines.push('');
-  lines.push('_Generato automaticamente — vedi guida [Project Alerts](https://github.com/agic-sandbox/.github/blob/main/docs/04-project-alerts.md)._');
+  // Mini-velocity (ultimi sprint) — anche nel README, qui per visibilita nello status update
+  const recent = (velocityRows || []).slice(-3);
+  if (recent.length) {
+    lines.push('📈 **Velocity (ultimi sprint)**');
+    lines.push('');
+    lines.push('| Sprint | Avanz. | SP |');
+    lines.push('|---|---|---|');
+    for (const r of recent) lines.push(`| ${r.title} | \`${bar(r.pct, 10)}\` ${r.pct}% | ${r.completedSp}/${r.committedSp} |`);
+    lines.push('');
+  }
+  lines.push('_Generato automaticamente — vedi guide [Alert](https://github.com/agic-sandbox/.github/blob/main/docs/04-project-alerts.md) · [Processo](https://github.com/agic-sandbox/.github/blob/main/docs/05-automazioni-processo.md)._');
   return lines.join('\n');
 }
 
@@ -99,8 +110,9 @@ async function postStatusUpdate(projectId, status, body, startDate, targetDate) 
       if (!fields[CONFIG.fieldNames.status]) { skipped++; continue; } // non Scrum
       const items = await getAllItems(p.id);
       const ind = computeIndicators(items, fields);
+      const velocityRows = velocityByIteration(items, fields);
       const status = deriveStatus(ind);
-      const body = buildBody(ind);
+      const body = buildBody(ind, velocityRows);
       const sd = ind.cur ? isoDate(ind.cur.start) : isoDate(startOfTodayUTC());
       const td = ind.cur ? isoDate(new Date(ind.cur.end.getTime() - 86400000)) : null;
 
