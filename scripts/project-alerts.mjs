@@ -79,6 +79,35 @@ const ALERT_DEFS = [
   { key: 'low_progress',   name: '🟡 Avanzamento insufficiente',color: 'YELLOW', description: 'Epic/Feature in ritardo a sprint quasi concluso' },
 ];
 
+// Sezione informativa inserita nel README del progetto da "setup".
+// Spiega a chi lavora sul progetto come vengono generati gli alert e come vederli.
+const README_MARK_START = '<!-- project-alerts:start -->';
+const README_MARK_END = '<!-- project-alerts:end -->';
+const ALERT_README_BLOCK = [
+  '## 🚨 Alert automatici',
+  '',
+  'Gli item possono mostrare un badge **🚨 Alert** colorato quando richiedono attenzione.',
+  'Gli alert sono **calcolati automaticamente** (workflow schedulato, 2 volte al giorno): non vanno impostati a mano.',
+  '',
+  'Ogni item riceve **un solo alert**, il piu grave tra le regole che scattano:',
+  '',
+  '| Alert | Quando scatta |',
+  '|---|---|',
+  '| 🔴 Scaduto | Target date passata e item non chiuso |',
+  '| 🔴 Bug critico aperto | Bug con Severity critica non ancora preso in carico |',
+  '| 🔴 Impediment bloccante | Impediment aperto da oltre 3 giorni |',
+  '| 🟠 In scadenza | Target date entro 3 giorni |',
+  '| 🟠 Fermo | In Progress senza aggiornamenti da oltre 5 giorni |',
+  '| 🟠 Priorita alta in backlog | Priority alta ferma in backlog da oltre 5 giorni |',
+  '| 🟡 Non pronto per sprint | Item nello sprint senza Story Points o assegnatario |',
+  '| 🟡 Avanzamento insufficiente | Epic/Feature in ritardo a sprint quasi concluso |',
+  '',
+  '**Come vederli nel board:** menu `...` della vista -> *Fields* -> attiva **🚨 Alert** (badge sulle card),',
+  'oppure *Group by* -> **🚨 Alert**, oppure filtra con `-no:"🚨 Alert"`.',
+  '',
+  '📖 Dettagli, soglie e attivazione: [guida Project Alerts](https://github.com/agic-sandbox/.github/blob/main/docs/04-project-alerts.md).',
+].join('\n');
+
 // ===================== GraphQL helper =====================
 const TOKEN = process.env.GITHUB_TOKEN || process.env.PROJECTS_TOKEN;
 const OWNER = process.env.PROJECT_OWNER;
@@ -174,25 +203,47 @@ async function setup() {
   const alertName = CONFIG.fieldNames.alert;
 
   if (fields[alertName]) {
-    console.log(`Il campo "${alertName}" esiste gia'. Nessuna azione.`);
-    console.log('Verifica che le opzioni coincidano con queste:');
-    ALERT_DEFS.forEach(a => console.log(`  - ${a.name}`));
-    return;
+    console.log(`Il campo "${alertName}" esiste gia'. Nessuna creazione.`);
+  } else {
+    const options = ALERT_DEFS.map(a => ({ name: a.name, color: a.color, description: a.description }));
+    const m = `
+      mutation($project: ID!, $name: String!, $options: [ProjectV2SingleSelectFieldOptionInput!]!) {
+        createProjectV2Field(input: {
+          projectId: $project, dataType: SINGLE_SELECT, name: $name, singleSelectOptions: $options
+        }) {
+          projectV2Field { ... on ProjectV2SingleSelectField { id name options { id name } } }
+        }
+      }`;
+    const data = await gql(m, { project: projectId, name: alertName, options });
+    const created = data.createProjectV2Field.projectV2Field;
+    console.log(`Creato campo "${created.name}" con ${created.options.length} opzioni.`);
   }
 
-  const options = ALERT_DEFS.map(a => ({ name: a.name, color: a.color, description: a.description }));
-  const m = `
-    mutation($project: ID!, $name: String!, $options: [ProjectV2SingleSelectFieldOptionInput!]!) {
-      createProjectV2Field(input: {
-        projectId: $project, dataType: SINGLE_SELECT, name: $name, singleSelectOptions: $options
-      }) {
-        projectV2Field { ... on ProjectV2SingleSelectField { id name options { id name } } }
-      }
-    }`;
-  const data = await gql(m, { project: projectId, name: alertName, options });
-  const created = data.createProjectV2Field.projectV2Field;
-  console.log(`Creato campo "${created.name}" con ${created.options.length} opzioni:`);
-  created.options.forEach(o => console.log(`  - ${o.name}`));
+  // README: inserisce/aggiorna la sezione informativa, preservando il resto.
+  await upsertReadme(projectId);
+  console.log('README del progetto aggiornato con la sezione "🚨 Alert automatici".');
+}
+
+// Inserisce o aggiorna il blocco alert nel README del progetto (idempotente).
+async function upsertReadme(projectId) {
+  const q = `query($id: ID!) { node(id: $id) { ... on ProjectV2 { readme } } }`;
+  const data = await gql(q, { id: projectId });
+  const existing = data.node.readme || '';
+  const wrapped = `${README_MARK_START}\n${ALERT_README_BLOCK}\n${README_MARK_END}`;
+
+  let next;
+  const s = existing.indexOf(README_MARK_START);
+  const e = existing.indexOf(README_MARK_END);
+  if (s !== -1 && e !== -1) {
+    next = existing.slice(0, s) + wrapped + existing.slice(e + README_MARK_END.length);
+  } else {
+    const base = existing.replace(/\s+$/, '');
+    next = base ? `${base}\n\n${wrapped}\n` : `${wrapped}\n`;
+  }
+
+  if (next === existing) return; // nessuna modifica necessaria
+  const m = `mutation($p: ID!, $r: String!) { updateProjectV2(input: { projectId: $p, readme: $r }) { projectV2 { id } } }`;
+  await gql(m, { p: projectId, r: next });
 }
 
 // ===================== Run: valuta regole e aggiorna =====================
