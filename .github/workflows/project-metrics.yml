@@ -1,0 +1,49 @@
+name: Project Metrics
+
+# Esporta metriche Scrum (velocity/throughput per iteration) in metrics/velocity.csv
+# e committa il file aggiornato nel repo.
+on:
+  schedule:
+    - cron: '0 5 * * 1'   # ogni lunedi alle 05:00 UTC
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Esegui senza scrivere/committare (true/false)'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Calcola metriche
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+          PROJECT_OWNER: ${{ vars.PROJECT_OWNER || 'agic-sandbox' }}
+          OWNER_TYPE: ${{ vars.OWNER_TYPE || 'organization' }}
+          METRICS_FILE: metrics/velocity.csv
+        run: |
+          DRY=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then DRY="--dry-run"; fi
+          node scripts/project-metrics.mjs $DRY
+
+      - name: Commit CSV aggiornato
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain metrics/velocity.csv)" ]; then
+            git add metrics/velocity.csv
+            git commit -m "chore: aggiorna metriche velocity [skip ci]"
+            git push
+          else
+            echo "Nessuna variazione nelle metriche."
+          fi
