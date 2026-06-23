@@ -100,9 +100,10 @@ Varianti utili:
   ```
   poi ricreare le viste in UI.
 
-`setup` inoltre inserisce/aggiorna nel **README del progetto** una sezione "🚨 Alert automatici"
-(regole-trigger e come visualizzarli), cosi chi lavora sul progetto sa da dove arrivano gli alert.
-L'operazione e idempotente e preserva il resto del README.
+`setup` inoltre inserisce/aggiorna nel **README del progetto** una sezione **⚙️ Automazioni & impostazioni**
+che riassume Alert, Digest e Velocity con i link alle guide, cosi chi lavora sul progetto sa da dove
+arrivano badge, status update e velocity. Il README segue il flusso *info progetto → 📈 Velocity → ⚙️ impostazioni*.
+L'operazione e idempotente e preserva il resto del README. Dettaglio digest/metriche: [guida 05](05-automazioni-processo.md).
 
 ## Configurazione delle regole
 

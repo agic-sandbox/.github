@@ -54,6 +54,15 @@ Prerequisiti: `gh` autenticato con PAT (scope `project`, `read:org`, `repo`).
 
 Per i campi e possibile uno script di allineamento additivo; per le viste, replica manuale.
 
+## Automazioni di processo sui progetti
+
+Sui progetti sono attive automazioni centralizzate (girano nel repo `.github`): **alert** sugli item,
+**digest** settimanale e **metriche di velocity**. Dettagli nelle guide [04](04-project-alerts.md) e
+[05](05-automazioni-processo.md).
+
+- I **nuovi** progetti creati dal template ereditano il campo 🚨 Alert e vengono processati in automatico.
+- I progetti **gia esistenti** prima dell'aggiunta del campo richiedono un `setup` una-tantum (vedi guida 04).
+
 ## Manutenzione del template
 
 Se vuoi evolvere lo standard (nuove viste, filtri, campi):

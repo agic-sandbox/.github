@@ -94,6 +94,9 @@ stati, story points) si usa il Project template dell'organizzazione, applicato a
 Un'automazione (**Project Alerts**) aggiorna inoltre un campo `🚨 Alert` sugli item dei Project
 in base a 8 regole (item scaduti, bug critici, impediment, ecc.): vedi [docs/04](docs/04-project-alerts.md).
 
+Altre automazioni di processo — **digest settimanale** (come *status update*) e **metriche di velocity**
+(README del progetto + CSV) — sono descritte in [docs/05](docs/05-automazioni-processo.md).
+
 ---
 
 ## Documentazione dei processi
