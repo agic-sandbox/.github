@@ -231,3 +231,34 @@ export function dateOnly(s) { const d = new Date(s + 'T00:00:00Z'); d.setUTCHour
 export function ageDays(iso, today = startOfTodayUTC()) { if (!iso) return 0; return Math.floor((today.getTime() - new Date(iso).getTime()) / 86400000); }
 export function daysUntil(s, today = startOfTodayUTC()) { return Math.floor((dateOnly(s).getTime() - today.getTime()) / 86400000); }
 export function isoDate(d) { return d.toISOString().slice(0, 10); }
+
+// ---- README del progetto: gestione blocchi marcati (idempotente) ----
+// Inserisce o aggiorna un blocco delimitato da marker HTML nel README del project,
+// preservando il resto. key identifica il blocco (es. "automazioni", "velocity").
+export async function upsertReadmeBlock(projectId, key, block) {
+  const start = `<!-- ${key}:start -->`;
+  const end = `<!-- ${key}:end -->`;
+  const wrapped = `${start}\n${block}\n${end}`;
+
+  const data = await gql(`query($id: ID!) { node(id: $id) { ... on ProjectV2 { readme } } }`, { id: projectId });
+  const existing = data.node.readme || '';
+
+  let next;
+  const s = existing.indexOf(start);
+  const e = existing.indexOf(end);
+  if (s !== -1 && e !== -1) {
+    next = existing.slice(0, s) + wrapped + existing.slice(e + end.length);
+  } else {
+    const base = existing.replace(/\s+$/, '');
+    next = base ? `${base}\n\n${wrapped}\n` : `${wrapped}\n`;
+  }
+  if (next === existing) return false;
+  await gql(`mutation($p: ID!, $r: String!) { updateProjectV2(input: { projectId: $p, readme: $r }) { projectV2 { id } } }`, { p: projectId, r: next });
+  return true;
+}
+
+// Barra testuale proporzionale (per visualizzazioni nel README/status update).
+export function bar(pct, width = 16) {
+  const filled = Math.round((Math.max(0, Math.min(100, pct)) / 100) * width);
+  return '█'.repeat(filled) + '░'.repeat(width - filled);
+}

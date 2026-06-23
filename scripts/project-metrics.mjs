@@ -2,23 +2,26 @@
 // @ts-nocheck
 /*
  * project-metrics.mjs
- * Esporta metriche Scrum per iteration (velocity, throughput, completamento)
- * di tutti i progetti dell'org in un CSV. Stesso approccio centralizzato.
+ * Calcola le metriche Scrum per iteration (velocity, throughput, completamento) e:
+ *   1) le pubblica in modo VISIVO nel README di ogni progetto (sezione "📈 Velocity sprint"),
+ *      con barre proporzionali + tabella;
+ *   2) le esporta SEMPRE anche come CSV grezzo (METRICS_FILE, default metrics/velocity.csv),
+ *      committato nel repo e linkato dal README.
+ * Stesso approccio centralizzato.
  *
  *   node project-metrics.mjs [--dry-run]
- *
- * Output: file CSV in METRICS_FILE (default "metrics/velocity.csv").
- * Il file viene rigenerato a ogni run (le iteration concluse sono stabili).
  */
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import {
-  CONFIG, listProjects, getFields, getAllItems, isDone,
-  allIterations, isoDate, startOfTodayUTC, fail,
+  CONFIG, listProjects, getFields, getAllItems, isDone, allIterations,
+  isoDate, startOfTodayUTC, upsertReadmeBlock, bar, fail,
 } from './lib/projects.mjs';
 
 const dryRun = process.argv.includes('--dry-run');
-const OUT = process.env.METRICS_FILE || 'metrics/velocity.csv';
+const CSV_FILE = process.env.METRICS_FILE || 'metrics/velocity.csv';
+const CSV_LINK = 'https://github.com/agic-sandbox/.github/blob/main/metrics/velocity.csv';
+const SPRINTS_SHOWN = 6; // ultime N iteration mostrate nel README
 
 const HEADERS = [
   'snapshot_date', 'project_number', 'project_title', 'iteration_title',
@@ -31,11 +34,10 @@ function csvCell(v) {
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
-function computeRows(project, items, fields, snapshot) {
+function computeIterations(items, fields) {
   const iterMap = new Map();
   for (const it of allIterations(fields)) iterMap.set(it.id, it);
 
-  // raggruppa item per iteration
   const byIter = new Map();
   for (const it of items) {
     if (!it.iterationId) continue;
@@ -56,45 +58,67 @@ function computeRows(project, items, fields, snapshot) {
     }
     const pct = committedSp > 0 ? Math.round((completedSp / committedSp) * 100)
       : (committed > 0 ? Math.round((completed / committed) * 100) : 0);
-    rows.push([
-      snapshot, project.number, project.title, meta.title,
-      isoDate(meta.start), isoDate(new Date(meta.end.getTime() - 86400000)),
-      committedSp, completedSp, committed, completed, pct,
-    ]);
+    rows.push({ title: meta.title, start: meta.start, end: meta.end, committedSp, completedSp, committed, completed, pct });
   }
-  // ordina per data iteration
-  rows.sort((a, b) => String(a[4]).localeCompare(String(b[4])));
+  rows.sort((a, b) => a.start - b.start);
   return rows;
+}
+
+function buildReadmeBlock(rows) {
+  const recent = rows.slice(-SPRINTS_SHOWN);
+  const completed = recent.filter(r => r.completedSp > 0);
+  const avgVelocity = completed.length ? Math.round(completed.reduce((s, r) => s + r.completedSp, 0) / completed.length) : 0;
+
+  const lines = [];
+  lines.push('## 📈 Velocity sprint');
+  lines.push('');
+  lines.push(`_Aggiornato automaticamente il ${isoDate(startOfTodayUTC())} — velocity media (SP completati): **${avgVelocity}**._`);
+  lines.push('');
+  lines.push('| Sprint | Completamento | SP (fatti/previsti) | Item |');
+  lines.push('|---|---|---|---|');
+  for (const r of recent) {
+    lines.push(`| ${r.title} | \`${bar(r.pct)}\` ${r.pct}% | ${r.completedSp}/${r.committedSp} | ${r.completed}/${r.committed} |`);
+  }
+  lines.push('');
+  lines.push(`📊 Dati grezzi (CSV): [metrics/velocity.csv](${CSV_LINK}) · grafici interattivi nella scheda **Insights** del progetto (vedi [guida 05](https://github.com/agic-sandbox/.github/blob/main/docs/05-automazioni-processo.md)).`);
+  return lines.join('\n');
 }
 
 (async () => {
   const snapshot = isoDate(startOfTodayUTC());
   const projects = await listProjects();
-  console.log(`Trovati ${projects.length} project aperti. Calcolo metriche per iteration...\n`);
+  console.log(`Trovati ${projects.length} project. Calcolo velocity, aggiorno README ed esporto CSV...\n`);
 
-  const allRows = [];
-  let processed = 0, skipped = 0;
+  const csvRows = [];
+  let updated = 0, skipped = 0;
   for (const p of projects) {
     if (p.itemCount === 0) { skipped++; continue; }
     const fields = await getFields(p.id);
     if (!fields[CONFIG.fieldNames.iteration] || !fields[CONFIG.fieldNames.status]) { skipped++; continue; }
     const items = await getAllItems(p.id);
-    const rows = computeRows(p, items, fields, snapshot);
+    const rows = computeIterations(items, fields);
     if (rows.length === 0) { skipped++; continue; }
-    allRows.push(...rows);
-    processed++;
+
     for (const r of rows) {
-      console.log(`#${p.number} ${r[3]}: ${r[7]}/${r[6]} SP completati (${r[10]}%), ${r[9]}/${r[8]} item`);
+      console.log(`#${p.number} ${r.title}: ${r.completedSp}/${r.committedSp} SP (${r.pct}%), ${r.completed}/${r.committed} item`);
+      csvRows.push([snapshot, p.number, p.title, r.title, isoDate(r.start), isoDate(new Date(r.end.getTime() - 86400000)), r.committedSp, r.completedSp, r.committed, r.completed, r.pct]);
     }
+
+    if (!dryRun) {
+      const changed = await upsertReadmeBlock(p.id, 'velocity', buildReadmeBlock(rows));
+      console.log(`  README #${p.number}: ${changed ? 'aggiornato' : 'invariato'}`);
+    }
+    updated++;
   }
 
-  const csv = [HEADERS, ...allRows].map(r => r.map(csvCell).join(',')).join('\n') + '\n';
+  const csv = [HEADERS, ...csvRows].map(r => r.map(csvCell).join(',')).join('\n') + '\n';
   if (dryRun) {
-    console.log(`\n[DRY-RUN] ${allRows.length} righe (${processed} progetti). Nessun file scritto. Anteprima CSV:\n`);
+    console.log(`\n[DRY-RUN] ${csvRows.length} righe (${updated} progetti). Nessuna scrittura. Anteprima CSV:\n`);
     console.log(csv.split('\n').slice(0, 8).join('\n'));
   } else {
-    mkdirSync(dirname(OUT), { recursive: true });
-    writeFileSync(OUT, csv, 'utf8');
-    console.log(`\nScritto ${OUT} con ${allRows.length} righe (${processed} progetti, ${skipped} saltati).`);
+    mkdirSync(dirname(CSV_FILE), { recursive: true });
+    writeFileSync(CSV_FILE, csv, 'utf8');
+    console.log(`\nScritto ${CSV_FILE} con ${csvRows.length} righe. ${updated} README aggiornati, ${skipped} progetti saltati.`);
   }
 })().catch(e => fail(e.message || e));
+

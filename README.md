@@ -104,3 +104,4 @@ Guide operative su progetti, template e issue: vedi [docs/](docs/README.md).
 - [Creazione progetti da template](docs/02-creazione-progetti-da-template.md)
 - [Viste, filtri e Scrum](docs/03-viste-filtri-scrum.md)
 - [Project Alerts (automazione)](docs/04-project-alerts.md)
+- [Automazioni di processo (digest, metriche)](docs/05-automazioni-processo.md)

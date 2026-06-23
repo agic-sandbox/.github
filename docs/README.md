@@ -11,6 +11,7 @@ Documentazione operativa per gestire **progetti, template e issue** nell'organiz
 | [02 — Creazione progetti da template](02-creazione-progetti-da-template.md) | Clonare il template Scrum, agganciare repo, script |
 | [03 — Viste, filtri e Scrum](03-viste-filtri-scrum.md) | Backlog, sprint, gerarchia, iteration, filtri per tipo |
 | [04 — Project Alerts (automazione)](04-project-alerts.md) | Campo Alert, 8 regole, workflow run-all, viste filtrate |
+| [05 — Automazioni di processo](05-automazioni-processo.md) | Digest settimanale (status update), metriche/velocity, Insights |
 
 ## Architettura in breve
 
@@ -53,6 +54,7 @@ flowchart TD
 | **Viste / filtri** | Configurabili solo da UI | **Non scrivibili via API** |
 | **Campi custom** | Creabili/valorizzabili via API | Le viste no |
 | **Project Alerts** | Workflow schedulato nel repo `.github` aggiorna il campo 🚨 Alert via API | Richiede il secret `PROJECTS_TOKEN` (PAT con scope `project`) |
+| **Digest / Metriche** | Workflow schedulati pubblicano status update e velocity (README + CSV) | Status update non eseguibili sui Project template |
 
 ## Per iniziare
 
