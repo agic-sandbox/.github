@@ -80,16 +80,17 @@ const ALERT_DEFS = [
 ];
 
 // Sezione informativa inserita nel README del progetto da "setup".
-// Spiega a chi lavora sul progetto come vengono generati gli alert e come vederli.
+// Descrive a chi lavora sul progetto le automazioni di processo attive.
 const README_MARK_START = '<!-- project-alerts:start -->';
 const README_MARK_END = '<!-- project-alerts:end -->';
 const ALERT_README_BLOCK = [
-  '## 🚨 Alert automatici',
+  '## 🤖 Automazioni di processo',
   '',
-  'Gli item possono mostrare un badge **🚨 Alert** colorato quando richiedono attenzione.',
-  'Gli alert sono **calcolati automaticamente** (workflow schedulato, 2 volte al giorno): non vanno impostati a mano.',
+  'Questo progetto è gestito da automazioni centralizzate (girano nel repo `.github`, nessuna azione manuale).',
   '',
-  'Ogni item riceve **un solo alert**, il piu grave tra le regole che scattano:',
+  '### 🚨 Alert automatici',
+  'Ogni item può mostrare un badge **🚨 Alert** colorato quando richiede attenzione. Calcolato 2 volte al giorno;',
+  'ogni item riceve **un solo alert**, il più grave tra le regole che scattano:',
   '',
   '| Alert | Quando scatta |',
   '|---|---|',
@@ -102,10 +103,17 @@ const ALERT_README_BLOCK = [
   '| 🟡 Non pronto per sprint | Item nello sprint senza Story Points o assegnatario |',
   '| 🟡 Avanzamento insufficiente | Epic/Feature in ritardo a sprint quasi concluso |',
   '',
-  '**Come vederli nel board:** menu `...` della vista -> *Fields* -> attiva **🚨 Alert** (badge sulle card),',
-  'oppure *Group by* -> **🚨 Alert**, oppure filtra con `-no:"🚨 Alert"`.',
+  'Per vederli: menu `...` della vista -> *Fields* -> attiva **🚨 Alert**, oppure *Group by* -> **🚨 Alert**, oppure filtra con `-no:"🚨 Alert"`.',
   '',
-  '📖 Dettagli, soglie e attivazione: [guida Project Alerts](https://github.com/agic-sandbox/.github/blob/main/docs/04-project-alerts.md).',
+  '### 🗓️ Digest settimanale',
+  'Ogni lunedì viene pubblicata una **Project status update** (On track / At risk / Off track) con il riepilogo di sprint,',
+  'scaduti, in scadenza, impediment e item in corso. La trovi nel menu del progetto sotto *Status updates*.',
+  '',
+  '### 📈 Velocity sprint',
+  'La sezione **📈 Velocity sprint** (più in basso in questo README) riporta velocity e completamento per sprint,',
+  'aggiornata automaticamente. Dati grezzi in CSV e grafici interattivi nella scheda **Insights**.',
+  '',
+  '📖 Dettagli e configurazione: [Alert](https://github.com/agic-sandbox/.github/blob/main/docs/04-project-alerts.md) · [Digest e Metriche](https://github.com/agic-sandbox/.github/blob/main/docs/05-automazioni-processo.md).',
 ].join('\n');
 
 // ===================== GraphQL helper =====================
