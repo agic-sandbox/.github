@@ -1,7 +1,7 @@
 name: Project Metrics
 
-# Esporta metriche Scrum (velocity/throughput per iteration) in metrics/velocity.csv
-# e committa il file aggiornato nel repo.
+# Calcola le metriche Scrum (velocity per iteration): aggiorna la sezione 📈 Velocity nel
+# README di ogni progetto via API e committa metrics/velocity.csv nel repo.
 on:
   schedule:
     - cron: '0 5 * * 1'   # ogni lunedi alle 05:00 UTC
