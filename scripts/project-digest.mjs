@@ -3,7 +3,8 @@
 /*
  * project-digest.mjs
  * Pubblica una "Project status update" settimanale su ogni progetto Scrum
- * dell'org, con un riepilogo di processo (sprint, scaduti, impediment, ecc.).
+ * dell'org, con un riepilogo di processo (sprint, scaduti, impediment, ecc.)
+ * e una mini-tabella velocity degli ultimi sprint.
  * Stesso approccio centralizzato degli alert (gira nel repo .github).
  *
  *   node project-digest.mjs [--dry-run]
@@ -12,7 +13,7 @@
  */
 import {
   CONFIG, listProjects, getFields, getAllItems, isType, isDone,
-  currentIteration, startOfTodayUTC, dateOnly, daysUntil, isoDate,
+  currentIteration, startOfTodayUTC, daysUntil, isoDate,
   velocityByIteration, bar, gql, fail,
 } from './lib/projects.mjs';
 

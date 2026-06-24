@@ -6,7 +6,7 @@
  * Motore di "alert/allarmi" per GitHub Projects (Scrum template AGIC).
  *
  * Sottocomandi:
- *   node project-alerts.mjs setup    -> crea il campo single-select "🚨 Alert" sul progetto (usa PROJECT_NUMBER)
+ *   node project-alerts.mjs setup    -> crea il campo "🚨 Alert" e scrive la sezione automazioni nel README (usa PROJECT_NUMBER)
  *   node project-alerts.mjs run      -> valuta le regole su UN progetto (usa PROJECT_NUMBER)
  *   node project-alerts.mjs run-all  -> scopre TUTTI i project dell'org e applica le regole a quelli col campo Alert
  *   aggiungi --dry-run per simulare senza scrivere
@@ -139,18 +139,18 @@ async function getProjectId() {
   return id;
 }
 
-// Scopre tutti i project (aperti) dell'owner.
+// Scopre tutti i project (aperti, esclusi i template) dell'owner.
 async function listProjects() {
   const out = [];
   let cursor = null, hasNext = true;
   const q = OWNER_TYPE === 'user'
-    ? `query($login:String!,$cursor:String){ user(login:$login){ projectsV2(first:50, after:$cursor){ pageInfo{ hasNextPage endCursor } nodes{ id number title closed } } } }`
-    : `query($login:String!,$cursor:String){ organization(login:$login){ projectsV2(first:50, after:$cursor){ pageInfo{ hasNextPage endCursor } nodes{ id number title closed } } } }`;
+    ? `query($login:String!,$cursor:String){ user(login:$login){ projectsV2(first:50, after:$cursor){ pageInfo{ hasNextPage endCursor } nodes{ id number title closed template } } } }`
+    : `query($login:String!,$cursor:String){ organization(login:$login){ projectsV2(first:50, after:$cursor){ pageInfo{ hasNextPage endCursor } nodes{ id number title closed template } } } }`;
   while (hasNext) {
     const data = await gql(q, { login: OWNER, cursor });
     const node = OWNER_TYPE === 'user' ? data.user : data.organization;
     const conn = node.projectsV2;
-    for (const p of conn.nodes) if (!p.closed) out.push(p);
+    for (const p of conn.nodes) if (!p.closed && !p.template) out.push(p);
     hasNext = conn.pageInfo.hasNextPage;
     cursor = conn.pageInfo.endCursor;
   }

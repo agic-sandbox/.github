@@ -1,6 +1,6 @@
 name: Project Digest
 
-# Pubblica una "Project status update" settimanale su ogni progetto Scrum dell'org.
+# Pubblica una "Project status update" settimanale (salute sprint + mini-velocity) su ogni progetto Scrum dell'org.
 on:
   schedule:
     - cron: '0 7 * * 1'   # ogni lunedi alle 07:00 UTC
