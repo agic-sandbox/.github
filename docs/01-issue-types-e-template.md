@@ -42,8 +42,8 @@ Ogni form imposta automaticamente il **Type** tramite la chiave `type:` nel fron
 ### Versione semplificata dei template (approccio leggero)
 
 Oltre ai 7 template completi esiste un set **semplificato** nella cartella
-`simplified-issue-templates/` (nella **root del repo**, fuori da `ISSUE_TEMPLATE/`), con gli stessi
-tipi ma solo i campi essenziali. Serve ai progetti che vogliono un approccio più snello.
+`.github/simplified-issue-templates/` (dentro `.github` ma **fuori** da `ISSUE_TEMPLATE/`), con gli
+stessi tipi ma solo i campi essenziali. Serve ai progetti che vogliono un approccio più snello.
 
 Punti chiave:
 
@@ -58,7 +58,7 @@ Punti chiave:
   semplificati, perché la cartella locale **sovrascrive** i default dell'org (override
   tutto-o-niente).
 
-Istruzioni operative complete: vedi il [README della cartella semplificata](../simplified-issue-templates/README.md).
+Istruzioni operative complete: vedi il [README della cartella semplificata](../.github/simplified-issue-templates/README.md).
 
 ### Regola di propagazione (importante)
 

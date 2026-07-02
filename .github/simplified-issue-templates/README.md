@@ -3,12 +3,12 @@
 Questa cartella contiene una versione **semplificata** dei 7 issue template dell'organizzazione,
 pensata per progetti con un approccio **più leggero** (meno campi, solo l'essenziale).
 
-> ⚠️ **Importante:** questa cartella sta **fuori** da `.github/ISSUE_TEMPLATE/`, quindi GitHub
-> **non** la tratta come set di template dell'organizzazione: questi file **non compaiono** nel
-> selettore delle issue e non interferiscono con l'anteprima dei template completi. Restano
-> **inerti** finché non vengono copiati nella root `.github/ISSUE_TEMPLATE/` di un repo di progetto
-> (vedi sotto). Questo è voluto: i progetti standard dell'org continuano a vedere solo i 7 template
-> completi.
+> ⚠️ **Importante:** questa cartella sta dentro `.github` ma **fuori** da `ISSUE_TEMPLATE/`,
+> quindi GitHub **non** la tratta come set di template dell'organizzazione: questi file **non
+> compaiono** nel selettore delle issue e non interferiscono con l'anteprima dei template completi.
+> Restano **inerti** finché non vengono copiati nella root `.github/ISSUE_TEMPLATE/` di un repo di
+> progetto (vedi sotto). Questo è voluto: i progetti standard dell'org continuano a vedere solo i 7
+> template completi.
 
 ## Cosa contiene
 
@@ -46,7 +46,7 @@ Da quel momento, per quel repo il selettore mostrerà **solo i 7 template sempli
 # clona/entra nel repo di progetto, poi:
 mkdir -p .github/ISSUE_TEMPLATE
 # copia i file semplificati presi da agic-sandbox/.github
-curl -sSL https://raw.githubusercontent.com/agic-sandbox/.github/main/simplified-issue-templates/1-epic.yml -o .github/ISSUE_TEMPLATE/1-epic.yml
+curl -sSL https://raw.githubusercontent.com/agic-sandbox/.github/main/.github/simplified-issue-templates/1-epic.yml -o .github/ISSUE_TEMPLATE/1-epic.yml
 # ...ripeti per 2-feature.yml ... 7-spike.yml
 git add .github/ISSUE_TEMPLATE && git commit -m "chore: usa issue template semplificati" && git push
 ```

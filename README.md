@@ -33,15 +33,15 @@ nel front-matter del form.
 
 ### Versione semplificata (per progetti "leggeri")
 
-Nella cartella [`simplified-issue-templates/`](simplified-issue-templates/) (nella **root del
-repo**, fuori da `ISSUE_TEMPLATE/`) c'è un set **semplificato** degli stessi 7 template (solo i
-campi essenziali), pensato per progetti con un approccio più snello.
+Nella cartella [`.github/simplified-issue-templates/`](.github/simplified-issue-templates/) (dentro
+`.github` ma **fuori** da `ISSUE_TEMPLATE/`) c'è un set **semplificato** degli stessi 7 template
+(solo i campi essenziali), pensato per progetti con un approccio più snello.
 
 - La cartella è **fuori** da `ISSUE_TEMPLATE/`: GitHub non la tratta come set di template dell'org,
   quindi **non compare nel selettore** e i progetti standard vedono solo i **7 completi**.
 - Per usarli in un progetto, si **copiano i file** nella cartella `.github/ISSUE_TEMPLATE/` del
   **repo di progetto** (l'override di repo sostituisce i default org).
-- Istruzioni complete: vedi il [README di `simplified-issue-templates/`](simplified-issue-templates/README.md).
+- Istruzioni complete: vedi il [README di `simplified-issue-templates/`](.github/simplified-issue-templates/README.md).
 
 ### Gerarchia consigliata
 
