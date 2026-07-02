@@ -1,0 +1,25 @@
+name: Task
+description: Attivita concreta e tracciabile — versione semplificata (light)
+title: "[Task] "
+type: Task
+labels: []
+body:
+  - type: textarea
+    id: descrizione
+    attributes:
+      label: Descrizione attivita
+      description: Cosa va fatto, in modo concreto e azionabile.
+      placeholder: Descrivi l'attivita da svolgere...
+    validations:
+      required: true
+
+  - type: textarea
+    id: checklist
+    attributes:
+      label: Checklist operativa
+      description: Passi concreti per completare il task.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: false

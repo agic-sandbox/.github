@@ -1,0 +1,23 @@
+name: Epic
+description: Obiettivo strategico che raggruppa piu feature — versione semplificata (light)
+title: "[Epic] "
+type: Epic
+labels: []
+body:
+  - type: textarea
+    id: obiettivo
+    attributes:
+      label: Obiettivo / Visione
+      description: Quale risultato di business vogliamo ottenere e perche e importante.
+      placeholder: Descrivi l'obiettivo strategico di alto livello...
+    validations:
+      required: true
+
+  - type: textarea
+    id: valore
+    attributes:
+      label: Valore atteso
+      description: Quale valore porta a utenti, clienti o organizzazione.
+      placeholder: Descrivi il valore atteso...
+    validations:
+      required: true

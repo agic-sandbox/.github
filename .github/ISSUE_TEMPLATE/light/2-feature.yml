@@ -1,0 +1,32 @@
+name: Feature
+description: Blocco di valore che si scompone in User Story — versione semplificata (light)
+title: "[Feature] "
+type: Feature
+labels: []
+body:
+  - type: textarea
+    id: obiettivo
+    attributes:
+      label: Obiettivo della Feature
+      description: Quale capacita introduce? Quale problema risolve?
+      placeholder: Descrivi l'obiettivo della feature...
+    validations:
+      required: true
+
+  - type: textarea
+    id: valore
+    attributes:
+      label: Valore di business
+      description: Perche questa Feature e importante? Che impatto ha?
+      placeholder: Descrivi il valore di business...
+    validations:
+      required: true
+
+  - type: input
+    id: epic-riferimento
+    attributes:
+      label: Epic di riferimento
+      description: Collega l'Epic padre, se presente.
+      placeholder: es. #12
+    validations:
+      required: false

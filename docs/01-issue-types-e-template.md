@@ -39,6 +39,25 @@ Un template per tipo:
 
 Ogni form imposta automaticamente il **Type** tramite la chiave `type:` nel front-matter.
 
+### Versione LIGHT dei template (approccio leggero)
+
+Oltre ai 7 template completi esiste un set **semplificato** ("light") in
+`.github/ISSUE_TEMPLATE/light/`, con gli stessi tipi ma solo i campi essenziali. Serve ai progetti
+che vogliono un approccio più snello.
+
+Punti chiave:
+
+- I file nella sottocartella `light/` **non compaiono nel selettore**: GitHub carica gli Issue Form
+  **solo dalla root** di `.github/ISSUE_TEMPLATE/`, non dalle sottocartelle. Per questo i progetti
+  standard dell'org continuano a vedere **solo i 7 completi** (nessun clutter, niente "14 tipi").
+- Il set light usa gli **stessi `type:`** dei completi: cambia solo il numero di campi del form,
+  non la classificazione dell'issue.
+- **Per attivarlo in un progetto**: copiare i file `.yml` da `light/` nella root
+  `.github/ISSUE_TEMPLATE/` del **repo di progetto**. Quel repo mostrerà solo i template light,
+  perché la cartella locale **sovrascrive** i default dell'org (override tutto-o-niente).
+
+Istruzioni operative complete: vedi il [README della cartella light](../.github/ISSUE_TEMPLATE/light/README.md).
+
 ### Regola di propagazione (importante)
 
 - I template della repo `.github` valgono come **default per TUTTE le repo dell'org**.

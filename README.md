@@ -31,6 +31,17 @@ vengono convertite in Markdown nel corpo dell'issue.
 Ogni template imposta automaticamente il campo **Type** dell'issue tramite la chiave `type:`
 nel front-matter del form.
 
+### Versione light (per progetti "leggeri")
+
+In [`.github/ISSUE_TEMPLATE/light/`](.github/ISSUE_TEMPLATE/light/) c'è un set **semplificato**
+degli stessi 7 template (solo i campi essenziali), pensato per progetti con un approccio più snello.
+
+- I template in `light/` **non compaiono nel selettore** dell'org: GitHub legge gli Issue Form solo
+  dalla **root** di `ISSUE_TEMPLATE/`, quindi i progetti standard vedono solo i **7 completi**.
+- Per usarli in un progetto, si **copiano i file** di `light/` nella cartella
+  `.github/ISSUE_TEMPLATE/` del **repo di progetto** (l'override di repo sostituisce i default org).
+- Istruzioni complete: vedi il [README di `light/`](.github/ISSUE_TEMPLATE/light/README.md).
+
 ### Gerarchia consigliata
 
 ```

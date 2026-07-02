@@ -1,0 +1,35 @@
+name: Bug
+description: Difetto con passi di riproduzione — versione semplificata (light)
+title: "[Bug] "
+type: Bug
+labels: []
+body:
+  - type: textarea
+    id: repro-steps
+    attributes:
+      label: Repro steps (passi per riprodurre)
+      description: Sequenza precisa per riprodurre il problema.
+      placeholder: |
+        1. Vai su ...
+        2. Clicca su ...
+        3. Osserva l'errore
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-behaviour
+    attributes:
+      label: Current behaviour (comportamento attuale)
+      description: Cosa succede davvero. Includi messaggi di errore se presenti.
+      placeholder: Descrivi cosa accade ora...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behaviour
+    attributes:
+      label: Expected behaviour (comportamento atteso)
+      description: Cosa dovrebbe succedere invece.
+      placeholder: Descrivi il comportamento corretto atteso...
+    validations:
+      required: true

@@ -1,0 +1,25 @@
+name: Impediment
+description: Ostacolo che blocca o rallenta il team — versione semplificata (light)
+title: "[Impediment] "
+type: Impediment
+labels: []
+body:
+  - type: textarea
+    id: descrizione
+    attributes:
+      label: Descrizione
+      description: Qual e l'ostacolo? Chi/cosa blocca? Qual e l'impatto?
+      placeholder: Descrivi l'ostacolo e il suo impatto...
+    validations:
+      required: true
+
+  - type: textarea
+    id: azioni
+    attributes:
+      label: Azioni
+      description: Cosa e stato fatto o si intende fare per rimuovere l'ostacolo.
+      placeholder: |
+        - [ ] Azione — Responsabile — Data
+        - [ ] ...
+    validations:
+      required: true

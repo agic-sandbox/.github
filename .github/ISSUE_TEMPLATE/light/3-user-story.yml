@@ -1,0 +1,34 @@
+name: User story
+description: Requisito dal punto di vista dell'utente — versione semplificata (light)
+title: "[User story] "
+type: User story
+labels: []
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: |
+        Struttura tipica (role-goal-benefit):
+        "Come [ruolo], voglio [azione], cosi che [beneficio]".
+      value: |
+        Come
+        voglio
+        cosi che
+      placeholder: |
+        Come cliente registrato
+        voglio salvare i prodotti in una wishlist
+        cosi che possa ritrovarli e acquistarli in seguito
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: Condizioni verificabili che rendono la story "accettata".
+      value: |
+        - [ ] **Dato** che ..., **quando** ..., **allora** ...
+        - [ ] **Dato** che ..., **quando** ..., **allora** ...
+    validations:
+      required: true

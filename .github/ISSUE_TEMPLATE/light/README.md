@@ -1,0 +1,60 @@
+# Issue template — versione LIGHT
+
+Questa cartella contiene una versione **semplificata** dei 7 issue template dell'organizzazione,
+pensata per progetti con un approccio **più leggero** (meno campi, solo l'essenziale).
+
+> ⚠️ **Importante:** i file in questa sottocartella **NON compaiono** nel selettore delle issue.
+> GitHub carica gli Issue Form **solo dalla root** di `.github/ISSUE_TEMPLATE/`, non dalle
+> sottocartelle. Quindi questi template restano **inerti** finché non vengono copiati in un repo
+> di progetto (vedi sotto). Questo è voluto: i progetti standard dell'org continuano a vedere solo
+> i 7 template completi.
+
+## Cosa contiene
+
+Stessi **tipi di issue** dei template completi (Epic, Feature, User story, Task, Bug, Impediment,
+Spike), ma con i **soli campi essenziali**:
+
+| File | Tipo | Campi |
+|------|------|-------|
+| `1-epic.yml` | Epic | Obiettivo/Visione · Valore atteso |
+| `2-feature.yml` | Feature | Obiettivo · Valore di business · Epic di riferimento (opz.) |
+| `3-user-story.yml` | User story | Description · Acceptance criteria |
+| `4-task.yml` | Task | Descrizione attività · Checklist (opz.) |
+| `5-bug.yml` | Bug | Repro steps · Comportamento attuale · Comportamento atteso |
+| `6-impediment.yml` | Impediment | Descrizione · Azioni |
+| `7-spike.yml` | Spike | Obiettivo · Domande · Timebox |
+
+Il campo `type:` è identico ai template completi: la **classificazione dell'issue non cambia**,
+cambia solo la quantità di campi del form.
+
+## Come attivare il set light in un progetto
+
+Per far usare a un repo di progetto la versione light **al posto** di quella completa:
+
+1. Nel repo di progetto crea la cartella `.github/ISSUE_TEMPLATE/` (se non esiste).
+2. **Copia i file** di questa cartella `light/` (i `.yml`, **non** la sottocartella) nella root
+   `.github/ISSUE_TEMPLATE/` del repo di progetto.
+3. Fai commit e push.
+
+Da quel momento, per quel repo il selettore mostrerà **solo i 7 template light**: la cartella
+`ISSUE_TEMPLATE/` del repo **sovrascrive** i default dell'org `.github`.
+
+### Esempio (dalla root del repo di progetto)
+
+```bash
+# clona/entra nel repo di progetto, poi:
+mkdir -p .github/ISSUE_TEMPLATE
+# copia i file light presi da agic-sandbox/.github
+curl -sSL https://raw.githubusercontent.com/agic-sandbox/.github/main/.github/ISSUE_TEMPLATE/light/1-epic.yml -o .github/ISSUE_TEMPLATE/1-epic.yml
+# ...ripeti per 2-feature.yml ... 7-spike.yml
+git add .github/ISSUE_TEMPLATE && git commit -m "chore: usa issue template light" && git push
+```
+
+> Nota: l'override è **tutto-o-niente**. Se un repo definisce una propria cartella
+> `ISSUE_TEMPLATE/`, i default dell'org non vengono più ereditati per quel repo. Copia quindi
+> **tutti** i template che vuoi rendere disponibili (light e/o completi a scelta).
+
+## Manutenzione
+
+Se aggiorni i template completi in `../` (root `ISSUE_TEMPLATE/`), valuta se allineare anche
+questi light. I due set sono indipendenti per scelta.
