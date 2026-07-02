@@ -1,4 +1,4 @@
-# Issue template — versione LIGHT
+# Simplified issue templates
 
 Questa cartella contiene una versione **semplificata** dei 7 issue template dell'organizzazione,
 pensata per progetti con un approccio **più leggero** (meno campi, solo l'essenziale).
@@ -27,16 +27,16 @@ Spike), ma con i **soli campi essenziali**:
 Il campo `type:` è identico ai template completi: la **classificazione dell'issue non cambia**,
 cambia solo la quantità di campi del form.
 
-## Come attivare il set light in un progetto
+## Come attivare il set semplificato in un progetto
 
-Per far usare a un repo di progetto la versione light **al posto** di quella completa:
+Per far usare a un repo di progetto la versione semplificata **al posto** di quella completa:
 
 1. Nel repo di progetto crea la cartella `.github/ISSUE_TEMPLATE/` (se non esiste).
-2. **Copia i file** di questa cartella `light/` (i `.yml`, **non** la sottocartella) nella root
-   `.github/ISSUE_TEMPLATE/` del repo di progetto.
+2. **Copia i file** di questa cartella `simplified-issue-templates/` (i `.yml`, **non** la
+   sottocartella) nella root `.github/ISSUE_TEMPLATE/` del repo di progetto.
 3. Fai commit e push.
 
-Da quel momento, per quel repo il selettore mostrerà **solo i 7 template light**: la cartella
+Da quel momento, per quel repo il selettore mostrerà **solo i 7 template semplificati**: la cartella
 `ISSUE_TEMPLATE/` del repo **sovrascrive** i default dell'org `.github`.
 
 ### Esempio (dalla root del repo di progetto)
@@ -44,17 +44,17 @@ Da quel momento, per quel repo il selettore mostrerà **solo i 7 template light*
 ```bash
 # clona/entra nel repo di progetto, poi:
 mkdir -p .github/ISSUE_TEMPLATE
-# copia i file light presi da agic-sandbox/.github
-curl -sSL https://raw.githubusercontent.com/agic-sandbox/.github/main/.github/ISSUE_TEMPLATE/light/1-epic.yml -o .github/ISSUE_TEMPLATE/1-epic.yml
+# copia i file semplificati presi da agic-sandbox/.github
+curl -sSL https://raw.githubusercontent.com/agic-sandbox/.github/main/.github/ISSUE_TEMPLATE/simplified-issue-templates/1-epic.yml -o .github/ISSUE_TEMPLATE/1-epic.yml
 # ...ripeti per 2-feature.yml ... 7-spike.yml
-git add .github/ISSUE_TEMPLATE && git commit -m "chore: usa issue template light" && git push
+git add .github/ISSUE_TEMPLATE && git commit -m "chore: usa issue template semplificati" && git push
 ```
 
 > Nota: l'override è **tutto-o-niente**. Se un repo definisce una propria cartella
 > `ISSUE_TEMPLATE/`, i default dell'org non vengono più ereditati per quel repo. Copia quindi
-> **tutti** i template che vuoi rendere disponibili (light e/o completi a scelta).
+> **tutti** i template che vuoi rendere disponibili (semplificati e/o completi a scelta).
 
 ## Manutenzione
 
 Se aggiorni i template completi in `../` (root `ISSUE_TEMPLATE/`), valuta se allineare anche
-questi light. I due set sono indipendenti per scelta.
+questi semplificati. I due set sono indipendenti per scelta.
