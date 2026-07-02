@@ -41,16 +41,16 @@ Ogni form imposta automaticamente il **Type** tramite la chiave `type:` nel fron
 
 ### Versione semplificata dei template (approccio leggero)
 
-Oltre ai 7 template completi esiste un set **semplificato** in
-`.github/ISSUE_TEMPLATE/simplified-issue-templates/`, con gli stessi tipi ma solo i campi
-essenziali. Serve ai progetti che vogliono un approccio più snello.
+Oltre ai 7 template completi esiste un set **semplificato** nella cartella
+`simplified-issue-templates/` (nella **root del repo**, fuori da `ISSUE_TEMPLATE/`), con gli stessi
+tipi ma solo i campi essenziali. Serve ai progetti che vogliono un approccio più snello.
 
 Punti chiave:
 
-- I file nella sottocartella `simplified-issue-templates/` **non compaiono nel selettore**: GitHub
-  carica gli Issue Form **solo dalla root** di `.github/ISSUE_TEMPLATE/`, non dalle sottocartelle.
-  Per questo i progetti standard dell'org continuano a vedere **solo i 7 completi** (nessun
-  clutter, niente "14 tipi").
+- La cartella è **fuori** da `.github/ISSUE_TEMPLATE/`: GitHub non la interpreta come set di
+  template dell'org, quindi **non compare nel selettore** e non interferisce con l'anteprima dei
+  template completi. I progetti standard dell'org continuano a vedere **solo i 7 completi**
+  (nessun clutter, niente "14 tipi").
 - Il set semplificato usa gli **stessi `type:`** dei completi: cambia solo il numero di campi del
   form, non la classificazione dell'issue.
 - **Per attivarlo in un progetto**: copiare i file `.yml` da `simplified-issue-templates/` nella
@@ -58,7 +58,7 @@ Punti chiave:
   semplificati, perché la cartella locale **sovrascrive** i default dell'org (override
   tutto-o-niente).
 
-Istruzioni operative complete: vedi il [README della cartella semplificata](../.github/ISSUE_TEMPLATE/simplified-issue-templates/README.md).
+Istruzioni operative complete: vedi il [README della cartella semplificata](../simplified-issue-templates/README.md).
 
 ### Regola di propagazione (importante)
 

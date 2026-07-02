@@ -3,11 +3,12 @@
 Questa cartella contiene una versione **semplificata** dei 7 issue template dell'organizzazione,
 pensata per progetti con un approccio **più leggero** (meno campi, solo l'essenziale).
 
-> ⚠️ **Importante:** i file in questa sottocartella **NON compaiono** nel selettore delle issue.
-> GitHub carica gli Issue Form **solo dalla root** di `.github/ISSUE_TEMPLATE/`, non dalle
-> sottocartelle. Quindi questi template restano **inerti** finché non vengono copiati in un repo
-> di progetto (vedi sotto). Questo è voluto: i progetti standard dell'org continuano a vedere solo
-> i 7 template completi.
+> ⚠️ **Importante:** questa cartella sta **fuori** da `.github/ISSUE_TEMPLATE/`, quindi GitHub
+> **non** la tratta come set di template dell'organizzazione: questi file **non compaiono** nel
+> selettore delle issue e non interferiscono con l'anteprima dei template completi. Restano
+> **inerti** finché non vengono copiati nella root `.github/ISSUE_TEMPLATE/` di un repo di progetto
+> (vedi sotto). Questo è voluto: i progetti standard dell'org continuano a vedere solo i 7 template
+> completi.
 
 ## Cosa contiene
 
@@ -32,8 +33,8 @@ cambia solo la quantità di campi del form.
 Per far usare a un repo di progetto la versione semplificata **al posto** di quella completa:
 
 1. Nel repo di progetto crea la cartella `.github/ISSUE_TEMPLATE/` (se non esiste).
-2. **Copia i file** di questa cartella `simplified-issue-templates/` (i `.yml`, **non** la
-   sottocartella) nella root `.github/ISSUE_TEMPLATE/` del repo di progetto.
+2. **Copia i file** `.yml` di questa cartella `simplified-issue-templates/` nella root
+   `.github/ISSUE_TEMPLATE/` del repo di progetto.
 3. Fai commit e push.
 
 Da quel momento, per quel repo il selettore mostrerà **solo i 7 template semplificati**: la cartella
@@ -45,7 +46,7 @@ Da quel momento, per quel repo il selettore mostrerà **solo i 7 template sempli
 # clona/entra nel repo di progetto, poi:
 mkdir -p .github/ISSUE_TEMPLATE
 # copia i file semplificati presi da agic-sandbox/.github
-curl -sSL https://raw.githubusercontent.com/agic-sandbox/.github/main/.github/ISSUE_TEMPLATE/simplified-issue-templates/1-epic.yml -o .github/ISSUE_TEMPLATE/1-epic.yml
+curl -sSL https://raw.githubusercontent.com/agic-sandbox/.github/main/simplified-issue-templates/1-epic.yml -o .github/ISSUE_TEMPLATE/1-epic.yml
 # ...ripeti per 2-feature.yml ... 7-spike.yml
 git add .github/ISSUE_TEMPLATE && git commit -m "chore: usa issue template semplificati" && git push
 ```
@@ -56,5 +57,5 @@ git add .github/ISSUE_TEMPLATE && git commit -m "chore: usa issue template sempl
 
 ## Manutenzione
 
-Se aggiorni i template completi in `../` (root `ISSUE_TEMPLATE/`), valuta se allineare anche
-questi semplificati. I due set sono indipendenti per scelta.
+Se aggiorni i template completi in `.github/ISSUE_TEMPLATE/`, valuta se allineare anche questi
+semplificati. I due set sono indipendenti per scelta.
