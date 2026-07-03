@@ -6,7 +6,7 @@ Come sono configurate le viste del template Scrum e come gestire sprint, gerarch
 > **`agic_kanban_template`** (#21), con un set di viste piu snello (Board per **Status** con WIP,
 > Backlog, Bug tracking, Alert attivi) e senza sprint/Story Points — vedi [guida 02](02-creazione-progetti-da-template.md).
 
-## Le 7 viste standard
+## Le 8 viste standard
 
 | Vista | Layout | Filtro | Note |
 |-------|--------|--------|------|
@@ -17,6 +17,7 @@ Come sono configurate le viste del template Scrum e come gestire sprint, gerarch
 | **Roadmap** | Roadmap | `type:Epic,Feature` | Group by Parent issue |
 | **Bug tracking** | Table | `type:Bug` | Colonne Priority, Severity |
 | **Impediment tracking** | Table | `type:Impediment` | — |
+| **Alert attivi** | Table | `-no:"🚨 Alert"` | Solo item con un alert attivo (vedi [guida 04](04-project-alerts.md)) |
 
 ## Filtrare per sprint corrente
 
