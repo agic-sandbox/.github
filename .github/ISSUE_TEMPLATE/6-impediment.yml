@@ -38,31 +38,3 @@ body:
       placeholder: Descrivi la risoluzione o lo stato attuale...
     validations:
       required: false
-
-  - type: dropdown
-    id: stato
-    attributes:
-      label: Stato
-      options:
-        - Aperto
-        - In gestione
-        - Risolto
-    validations:
-      required: false
-
-  - type: input
-    id: responsabile
-    attributes:
-      label: Responsabile rimozione
-      placeholder: es. Mario Rossi / Team Backend
-    validations:
-      required: false
-
-  - type: input
-    id: elementi-bloccati
-    attributes:
-      label: Elementi bloccati
-      description: Story/Task impattati dall'ostacolo.
-      placeholder: es. #20, #26
-    validations:
-      required: false

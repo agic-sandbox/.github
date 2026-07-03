@@ -51,13 +51,10 @@ body:
       required: false
 
   - type: textarea
-    id: feature-collegate
+    id: note
     attributes:
-      label: Feature collegate
-      description: Elenca le Feature che compongono questa Epic (collegabili come sub-issue).
-      placeholder: |
-        - [ ] Feature 1
-        - [ ] Feature 2
+      label: Note / Rischi / Dipendenze
+      placeholder: Informazioni aggiuntive, rischi o dipendenze rilevanti...
     validations:
       required: false
 
@@ -68,13 +65,5 @@ body:
       description: Come misuriamo se l'Epic ha raggiunto l'obiettivo?
       placeholder: |
         - ...
-    validations:
-      required: false
-
-  - type: textarea
-    id: note
-    attributes:
-      label: Note / Rischi / Dipendenze
-      placeholder: Informazioni aggiuntive, rischi o dipendenze rilevanti...
     validations:
       required: false

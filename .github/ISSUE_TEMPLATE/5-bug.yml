@@ -9,8 +9,6 @@ body:
       value: |
         Grazie per la segnalazione. Compila i campi sottostanti nel modo piu preciso possibile:
         aiuta il team a riprodurre e risolvere il problema piu velocemente.
-        I campi **Severity**, **Priority**, **Detected in production** e **Bug categorization**
-        si impostano dai relativi campi dedicati nella sidebar dell'issue, non qui.
 
   - type: textarea
     id: repro-steps
@@ -43,15 +41,12 @@ body:
     validations:
       required: true
 
-  - type: dropdown
+  - type: input
     id: ambiente
     attributes:
       label: Ambiente
-      description: In quale ambiente si verifica il problema.
-      options:
-        - Dev
-        - Test
-        - Prod
+      description: Ambiente in cui si riscontra il bug.
+      placeholder: es. Dev, Test, Prod, Collaudo cliente...
     validations:
       required: false
 
@@ -76,9 +71,9 @@ body:
   - type: input
     id: utenti-impattati
     attributes:
-      label: Utenti impattati
-      description: Chi e colpito dal problema e con quale estensione.
-      placeholder: es. tutti gli utenti, solo mobile, un singolo cliente
+      label: Impatto sugli utenti
+      description: Chi e colpito e con quale estensione/gravita (quanti utenti, quale area, criticita operativa).
+      placeholder: es. tutti gli utenti dell'area vendite; blocca il checkout per ~200 clienti/giorno
     validations:
       required: false
 

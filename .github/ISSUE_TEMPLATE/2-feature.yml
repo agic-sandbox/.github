@@ -29,26 +29,6 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: epic-riferimento
-    attributes:
-      label: Epic di riferimento
-      description: Collega l'Epic padre, se presente.
-      placeholder: es. #12
-    validations:
-      required: false
-
-  - type: textarea
-    id: user-story
-    attributes:
-      label: User Story previste
-      description: Elenca le Story in cui si scompone (collegabili come sub-issue).
-      placeholder: |
-        - [ ] Story 1
-        - [ ] Story 2
-    validations:
-      required: false
-
   - type: textarea
     id: dod
     attributes:
