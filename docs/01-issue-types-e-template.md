@@ -69,13 +69,18 @@ Istruzioni operative complete: vedi il [README della cartella semplificata](../.
 ## Campi org-level vs campi nel form
 
 Alcuni attributi NON stanno nei form perche esistono come **Issue Field org-level** (sidebar issue):
-Priority, Severity, Effort level, Detected in production, Bug categorization, Story Points, ecc.
+Priority, Severity, Effort level, Detected in production, Bug categorization, ecc.
 Questo evita duplicazioni e li rende utilizzabili nei filtri/raggruppamenti dei Project.
+
+> **Story Points** e **Iteration** non sono Issue Field org-level ma **campi del Project** (Scrum):
+> si valorizzano quando l'issue e nel progetto e servono a stima/sprint. Sul template Kanban non
+> sono presenti.
 
 | Dove valorizzare | Campi |
 |------------------|-------|
 | **Nel form** (corpo issue) | Repro steps, Acceptance criteria, descrizioni, checklist |
-| **Nella sidebar** (Issue Field) | Priority, Severity, Effort level, Story Points, ... |
+| **Nella sidebar** (Issue Field org-level) | Priority, Severity, Effort level, Detected in production, Bug categorization, ... |
+| **Nel Project** (campo di board) | Status, Story Points (Scrum), Iteration (Scrum), Target date, ... |
 
 ## Come modificare i template
 

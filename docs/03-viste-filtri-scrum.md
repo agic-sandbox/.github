@@ -64,7 +64,7 @@ La gerarchia si basa sulle **sub-issues** (relazione parent/child), non sui filt
 ## Stati (campo Status)
 
 Il campo **Status** del Project porta il superset di stati Scrum:
-New → Plannable → In analysis → Ready to work → Approved → To Do → In Progress →
+New → In analysis → Ready to work → Approved → To Do → In Progress →
 Ready for qa → Validated by QA → Done → Removed.
 
 > Differenza da ADO: lo Status e **unico e condiviso** tra tutti i tipi (non esistono stati

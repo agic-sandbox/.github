@@ -84,8 +84,10 @@ Impediment   → ostacoli trasversali che bloccano il lavoro
 Alcuni attributi **non** sono nel form perché esistono come **Issue Field a livello di
 organizzazione** e si valorizzano dalla sidebar dell'issue (es. nei Bug):
 
-- **Priority**, **Severity**, **Detected in production**, **Bug categorization**, **Effort level**,
-  **Story Points**, ecc.
+- **Priority**, **Severity**, **Detected in production**, **Bug categorization**, **Effort level**, ecc.
+
+> **Story Points** e **Iteration** non sono Issue Field org-level ma **campi del Project** (Scrum),
+> valorizzati sulla board del progetto.
 
 Questo evita duplicazioni tra form e campi strutturati (utili per filtri e viste nei Projects).
 
