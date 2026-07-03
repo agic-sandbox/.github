@@ -29,16 +29,20 @@ const CONFIG = {
   staleDays: 5,               // (4) "Fermo": In Progress senza update da N giorni
   impedimentMaxAgeDays: 3,    // (6) "Impediment bloccante": aperto da piu di N giorni
   highPriorityBacklogDays: 5, // (7) "Priorita alta in backlog": in backlog da N giorni
+  blockedMaxAgeDays: 2,       // (Kanban) "Bloccato": in stato Blocked da piu di N giorni
   sprintProgressThreshold: 0.7, // (8) sprint considerato "quasi concluso" oltre questa frazione trascorsa
   lowProgressPercent: 50,     // (8) sotto questa % di sub-issue completate scatta l'alert
 
   // --- Mappatura valori dei campi single-select (ADATTA AI TUOI VALORI) ---
-  // Stati che NON contano come "iniziati" (backlog / da fare)
-  notStartedStatuses: ['New', 'In analysis', 'Ready to work', 'Approved', 'To Do'],
-  // Stati di lavorazione attiva
-  inProgressStatuses: ['In Progress', 'Ready for qa'],
+  // Unione stati Scrum + Kanban: gli stati non presenti in un metodo semplicemente non fanno match.
+  // Stati che NON contano come "iniziati" (backlog / da fare) - Scrum + Kanban (Backlog, Ready)
+  notStartedStatuses: ['New', 'In analysis', 'Ready to work', 'Approved', 'To Do', 'Backlog', 'Ready'],
+  // Stati di lavorazione attiva - Scrum + Kanban (In Review)
+  inProgressStatuses: ['In Progress', 'Ready for qa', 'In Review'],
   // Stati "chiusi": nessun alert
   doneStatuses: ['Done', 'Removed'],
+  // Stati "bloccato" (Kanban): item fermo per un ostacolo
+  blockedStatuses: ['Blocked'],
   // Valori di Priority considerati "alti"
   highPriorityValues: ['P0', 'P1', 'Urgent', 'High'],
   // Valori di Severity considerati "critici"
@@ -72,6 +76,7 @@ const ALERT_DEFS = [
   { key: 'overdue',        name: '🔴 Scaduto',                  color: 'RED',    description: 'Item aperto con target date superata' },
   { key: 'critical_bug',   name: '🔴 Bug critico aperto',       color: 'RED',    description: 'Bug critico non ancora preso in carico' },
   { key: 'impediment',     name: '🔴 Impediment bloccante',     color: 'RED',    description: 'Impediment aperto da troppo tempo' },
+  { key: 'blocked',        name: '🔴 Bloccato',                 color: 'RED',    description: 'Item in stato Blocked da troppo tempo (Kanban)' },
   { key: 'due_soon',       name: '🟠 In scadenza',              color: 'ORANGE', description: 'Target date entro pochi giorni' },
   { key: 'stale',          name: '🟠 Fermo',                    color: 'ORANGE', description: 'In Progress senza aggiornamenti' },
   { key: 'high_backlog',   name: '🟠 Priorita alta in backlog', color: 'ORANGE', description: 'Alta priorita ferma in backlog' },
@@ -275,8 +280,10 @@ async function processProject(projectId, dryRun, quiet) {
   for (const o of alertField.options) optByName[o.name] = o.id;
   const keyToOptionId = {};
   for (const a of ALERT_DEFS) {
+    // Un progetto puo esporre solo un sottoinsieme delle opzioni (es. Kanban non ha le
+    // opzioni sprint, Scrum non ha "Bloccato"): le regole non applicabili non fanno match,
+    // quindi le opzioni assenti si ignorano senza rumore.
     if (optByName[a.name]) keyToOptionId[a.key] = optByName[a.name];
-    else console.warn(`ATTENZIONE: opzione "${a.name}" non trovata sul campo Alert (project ${projectId}).`);
   }
 
   const ctx = buildContext(fields);
@@ -292,8 +299,10 @@ async function processProject(projectId, dryRun, quiet) {
 
     const label = it.number ? `#${it.number}` : '(draft)';
     if (desiredName) {
+      const optId = keyToOptionId[desiredKey];
+      if (!optId) { unchanged++; continue; } // opzione non presente su questo progetto: salta
       if (!quiet) console.log(`${label} ${it.title?.slice(0, 50) || ''} -> ${desiredName}`);
-      if (!dryRun) await setAlert(projectId, it.id, alertField.id, keyToOptionId[desiredKey]);
+      if (!dryRun) await setAlert(projectId, it.id, alertField.id, optId);
       changed++;
     } else {
       if (!quiet) console.log(`${label} ${it.title?.slice(0, 50) || ''} -> (rimuovo alert)`);
@@ -341,6 +350,10 @@ function evaluate(it, ctx) {
   // (6) Impediment aperto da troppo tempo
   if (isType(it, CONFIG.impedimentTypes)
       && ageDays(it.createdAt, ctx.today) > CONFIG.impedimentMaxAgeDays) return 'impediment';
+
+  // (Kanban) Item fermo nello stato "Blocked" da troppo tempo
+  if (CONFIG.blockedStatuses.includes(status)
+      && ageDays(it.updatedAt, ctx.today) > CONFIG.blockedMaxAgeDays) return 'blocked';
 
   // (2) In scadenza
   if (it.targetDate) {

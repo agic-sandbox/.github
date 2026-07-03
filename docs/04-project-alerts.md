@@ -2,8 +2,9 @@
 
 Sistema di **allarmi/alert** per i GitHub Projects dell'organizzazione `agic-sandbox`.
 Un campo single-select **🚨 Alert** viene aggiornato automaticamente da una GitHub Action
-in base a 8 regole: gli item che richiedono attenzione risaltano con un badge colorato in
-tutte le viste, senza intervento manuale.
+in base a un set di regole: gli item che richiedono attenzione risaltano con un badge colorato in
+tutte le viste, senza intervento manuale. Il set di regole si **adatta al metodo** del progetto
+(Scrum o Kanban): le regole non applicabili non fanno match.
 
 > In breve: il campo Alert e nel **template** (quindi ereditato dai nuovi progetti);
 > un workflow schedulato nel repo `.github` scopre **tutti** i progetti dell'org e
@@ -27,29 +28,41 @@ flowchart LR
     class TPL,P1,P2,P3,WF,SCRIPT,SEC,USERS box;
 ```
 
-## Le 8 regole
+## Le regole
 
 Le regole sono valutate in ordine di priorita: la **prima che fa match vince** (ogni item
 riceve al massimo un alert, quello piu importante). Gli item in stato chiuso (`Done`,
-`Removed`) non ricevono alert.
+`Removed`) non ricevono alert. La colonna **Metodo** indica dove la regola e applicabile.
 
-| # | Alert | Colore | Condizione | Soglia (default) |
-|---|-------|--------|-----------|------------------|
-| 1 | 🔴 Scaduto | rosso | Item aperto con `Target date` < oggi | — |
-| 2 | 🔴 Bug critico aperto | rosso | Tipo Bug + `Severity` critica + stato non iniziato | Severity in Critical/High/Blocker |
-| 3 | 🔴 Impediment bloccante | rosso | Tipo Impediment aperto da troppo tempo | > 3 giorni |
-| 4 | 🟠 In scadenza | arancio | `Target date` entro pochi giorni | <= 3 giorni |
-| 5 | 🟠 Fermo | arancio | Stato In Progress senza aggiornamenti | > 5 giorni |
-| 6 | 🟠 Priorita alta in backlog | arancio | `Priority` alta + stato backlog da troppo tempo | > 5 giorni |
-| 7 | 🟡 Non pronto per sprint | giallo | Item nello sprint corrente senza Story Points o senza assegnatario | — |
-| 8 | 🟡 Avanzamento insufficiente | giallo | Epic/Feature nello sprint, a sprint quasi concluso, con sub-issue completate sotto soglia | sprint > 70% trascorso, progresso < 50% |
+| # | Alert | Colore | Metodo | Condizione | Soglia (default) |
+|---|-------|--------|--------|-----------|------------------|
+| 1 | 🔴 Scaduto | rosso | tutti | Item aperto con `Target date` < oggi | — |
+| 2 | 🔴 Bug critico aperto | rosso | tutti | Tipo Bug + `Severity` critica + stato non iniziato | Severity in Critical/High/Blocker |
+| 3 | 🔴 Impediment bloccante | rosso | tutti | Tipo Impediment aperto da troppo tempo | > 3 giorni |
+| 4 | 🔴 Bloccato | rosso | Kanban | Stato `Blocked` senza aggiornamenti da troppo tempo | > 2 giorni |
+| 5 | 🟠 In scadenza | arancio | tutti | `Target date` entro pochi giorni | <= 3 giorni |
+| 6 | 🟠 Fermo | arancio | tutti | Stato In Progress/In Review senza aggiornamenti | > 5 giorni |
+| 7 | 🟠 Priorita alta in backlog | arancio | tutti | `Priority` alta + stato backlog da troppo tempo | > 5 giorni |
+| 8 | 🟡 Non pronto per sprint | giallo | Scrum | Item nello sprint corrente senza Story Points o senza assegnatario | — |
+| 9 | 🟡 Avanzamento insufficiente | giallo | Scrum | Epic/Feature nello sprint, a sprint quasi concluso, con sub-issue completate sotto soglia | sprint > 70% trascorso, progresso < 50% |
 
-> L'ordine in tabella riflette la priorita usata dal motore (1 = piu alta).
+> L'ordine in tabella riflette la priorita usata dal motore (1 = piu alta). Le regole **Scrum**
+> (8, 9) si attivano solo con un campo Iteration e uno sprint corrente; la regola **Kanban** (4)
+> solo su progetti con lo stato `Blocked`. Il metodo si deduce automaticamente dal progetto.
 
 ## Il campo 🚨 Alert
 
-Campo single-select con 8 opzioni colorate (3 rosse, 3 arancioni, 2 gialle), create via API
-sul template #14. I progetti generati dal template lo ereditano automaticamente.
+Campo single-select con opzioni colorate, creato via API sui template e **ereditato** dai progetti
+generati da essi. Esistono due palette a seconda del metodo:
+
+- **Scrum** (template #14 `agic_scrum_template`): 8 opzioni (3 rosse, 3 arancioni, 2 gialle),
+  incluse le due sprint (*Non pronto per sprint*, *Avanzamento insufficiente*).
+- **Kanban** (template #21 `agic_kanban_template`): 7 opzioni (4 rosse, 3 arancioni), con
+  **🔴 Bloccato** al posto delle due sprint.
+
+Il motore mappa le regole alle opzioni **per nome**: se un progetto non espone un'opzione (es. un
+progetto Scrum non ha *Bloccato*, un Kanban non ha le opzioni sprint) la regola relativa viene
+semplicemente ignorata su quel progetto, senza errori.
 
 ## Automazione
 

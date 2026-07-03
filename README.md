@@ -141,7 +141,7 @@ eseguiti dai workflow schedulati in `.github/workflows/`:
 
 | Script | Workflow | Cosa fa |
 |--------|----------|---------|
-| `project-alerts.mjs` | `project-alerts.yml` | Aggiorna il campo `🚨 Alert` sugli item dei Project in base a 8 regole (item scaduti, bug critici, impediment, ecc.) |
+| `project-alerts.mjs` | `project-alerts.yml` | Aggiorna il campo `🚨 Alert` sugli item dei Project in base a un set di regole adattato al metodo (Scrum/Kanban): item scaduti, bug critici, impediment, bloccati, ecc. |
 | `project-digest.mjs` | `project-digest.yml` | Pubblica un **digest settimanale** come *status update* del Project |
 | `project-metrics.mjs` | `project-metrics.yml` | Esporta **velocity/throughput** per iteration in `metrics/velocity.csv` e nel README del progetto |
 
