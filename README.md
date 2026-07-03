@@ -134,8 +134,9 @@ Questo evita duplicazioni tra form e campi strutturati (utili per filtri e viste
 
 ## Automazioni e integrazione con i GitHub Projects
 
-I tipi e i template sono indipendenti dalle board. Per la gestione Scrum (sprint, backlog,
-stati, story points) si usa il Project template dell'organizzazione, applicato alle singole repo.
+I tipi e i template sono indipendenti dalle board. Per la gestione del lavoro si usano i **Project
+template** dell'organizzazione (Scrum o Kanban), applicati alle singole repo. Vedi
+[docs/02](docs/02-creazione-progetti-da-template.md).
 
 In questa repository vivono anche le **automazioni di processo**, come script Node in `scripts/`
 eseguiti dai workflow schedulati in `.github/workflows/`:

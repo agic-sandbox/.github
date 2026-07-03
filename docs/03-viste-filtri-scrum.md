@@ -2,6 +2,10 @@
 
 Come sono configurate le viste del template Scrum e come gestire sprint, gerarchia e filtri.
 
+> Questa guida riguarda il template **Scrum** (#14). Per progetti **Kanban** si usa il template
+> **`agic_kanban_template`** (#21), con un set di viste piu snello (Board per **Status** con WIP,
+> Backlog, Bug tracking, Alert attivi) e senza sprint/Story Points — vedi [guida 02](02-creazione-progetti-da-template.md).
+
 ## Le 7 viste standard
 
 | Vista | Layout | Filtro | Note |

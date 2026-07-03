@@ -14,6 +14,9 @@
 .PARAMETRO Title
   Titolo del nuovo progetto (es. "agic-clienteX-progetto").
 
+.PARAMETRO Method
+  (Opzionale) metodo del progetto: "scrum" (default, template #14) o "kanban" (template #21).
+
 .PARAMETRO RepoToLink
   (Opzionale) owner/repo da agganciare automaticamente al nuovo progetto.
 
@@ -22,22 +25,30 @@
 
 .ESEMPIO
   ./new-project-from-template.ps1 -Title "agic-acme-shop" -RepoToLink "agic-sandbox/acme-project"
+
+.ESEMPIO
+  ./new-project-from-template.ps1 -Title "agic-acme-flow" -Method kanban
 #>
 param(
   [Parameter(Mandatory=$true)][string]$Title,
+  [ValidateSet('scrum','kanban')][string]$Method = 'scrum',
   [string]$RepoToLink,
   [switch]$IncludeDraftIssues
 )
 $ErrorActionPreference = "Stop"
 
-# --- Config template (Project #14 "agic_scrum_template") ---
-# Clonato da acme_project (#12): 7 viste preconfigurate (Backlog, Sprint backlog/board/breakdown,
-# Roadmap, Bug tracking, Impediment tracking) con filtri gia impostati. 0 item demo.
+# --- Config template (Project dell'org, marcati come template) ---
+# scrum  = #14 agic_scrum_template  (viste sprint, Story Points, Iteration)
+# kanban = #21 agic_kanban_template (viste di flusso, no Story Points/Iteration)
 $ORG_LOGIN     = "agic-sandbox"
 $OWNER_ID      = "O_kgDOEGS8MQ"             # node id org agic-sandbox
-$TEMPLATE_PID  = "PVT_kwDOEGS8Mc4BbB9y"     # node id Project #14 template (agic_scrum_template)
+$TEMPLATE_PIDS = @{
+  scrum  = "PVT_kwDOEGS8Mc4BbB9y"          # node id Project #14 (agic_scrum_template)
+  kanban = "PVT_kwDOEGS8Mc4BcYvm"          # node id Project #21 (agic_kanban_template)
+}
+$TEMPLATE_PID  = $TEMPLATE_PIDS[$Method]
 
-Write-Host "Clono il template '$TEMPLATE_PID' -> nuovo progetto '$Title'..."
+Write-Host "Clono il template [$Method] '$TEMPLATE_PID' -> nuovo progetto '$Title'..."
 
 $drafts = if($IncludeDraftIssues){ "true" } else { "false" }
 $q = @"

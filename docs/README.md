@@ -8,7 +8,7 @@ Documentazione operativa per gestire **progetti, template e issue** nell'organiz
 | Guida | Argomento |
 |-------|-----------|
 | [01 — Issue Types e Template](01-issue-types-e-template.md) | Tipi di issue org-level, Issue Form, repo `.github` |
-| [02 — Creazione progetti da template](02-creazione-progetti-da-template.md) | Clonare il template Scrum, agganciare repo, script |
+| [02 — Creazione progetti da template](02-creazione-progetti-da-template.md) | Clonare i template Scrum/Kanban, agganciare repo, script |
 | [03 — Viste, filtri e Scrum](03-viste-filtri-scrum.md) | Backlog, sprint, gerarchia, iteration, filtri per tipo |
 | [04 — Project Alerts (automazione)](04-project-alerts.md) | Campo Alert, regole Scrum/Kanban, workflow run-all, viste filtrate |
 | [05 — Automazioni di processo](05-automazioni-processo.md) | Digest settimanale (status update), metriche/velocity, Insights |
