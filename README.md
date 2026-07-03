@@ -22,8 +22,8 @@ scripts/                        # logica delle automazioni (Node 20, zero dipend
 ├─ project-metrics.mjs          # esporta velocity/throughput per iteration
 └─ lib/projects.mjs             # funzioni condivise (GraphQL, helper Project)
 metrics/
-├─ velocity.csv                 # storico velocity (progetti Scrum) generato dalle automazioni
-└─ throughput.csv               # storico throughput settimanale (progetti Kanban)
+├─ velocity.csv                 # storico velocity (progetti Scrum), generato dalle automazioni
+└─ throughput.csv               # storico throughput settimanale (progetti Kanban), generato al 1° run Kanban
 docs/                           # guide operative (indice in fondo a questo README)
 README.md                       # questo file
 ```
