@@ -1,8 +1,12 @@
 # 05 — Automazioni di processo (Digest e Metriche)
 
 Automazioni centralizzate che, come gli [Alert](04-project-alerts.md), girano nel repo `.github`
-e agiscono via API su tutti i progetti Scrum dell'organizzazione `agic-sandbox`. Nessuna
+e agiscono via API su tutti i progetti dell'organizzazione `agic-sandbox`. Nessuna
 configurazione per progetto: i nuovi progetti vengono coperti automaticamente.
+
+> **Adattamento al metodo**: Digest e Metriche rilevano se il progetto è **Scrum** (ha il campo
+> Iteration) o **Kanban** (flusso continuo, senza sprint) e producono l'output coerente — velocity
+> per sprint nello Scrum, throughput settimanale nel Kanban.
 
 > I progetti **template** e chiusi sono esclusi (l'API rifiuta scritture come gli status update
 > sui template).
@@ -12,31 +16,39 @@ configurazione per progetto: i nuovi progetti vengono coperti automaticamente.
 | Automazione | Cosa produce | Dove si legge | Cadenza |
 |-------------|--------------|---------------|---------|
 | 🚨 Alert | Campo colorato sugli item | Board / viste | 2×/giorno |
-| 🗓️ Digest | Project **status update** | Menu progetto → *Status updates* | Lunedi 07:00 UTC |
-| 📈 Metriche | Sezione **Velocity** nel README + CSV | README del progetto + `metrics/velocity.csv` | Lunedi 05:00 UTC |
+| 🗓️ Digest | Project **status update** (Scrum: sprint · Kanban: flusso) | Menu progetto → *Status updates* | Lunedi 07:00 UTC |
+| 📈 Metriche | **Velocity** (Scrum) o **Throughput** (Kanban) nel README + CSV | README + `metrics/velocity.csv` / `metrics/throughput.csv` | Lunedi 05:00 UTC |
 
 ## 🗓️ Digest settimanale
 
 - **File**: `scripts/project-digest.mjs` + `.github/workflows/project-digest.yml`.
-- **Cosa fa**: per ogni progetto Scrum pubblica una **Project status update** con:
+- **Scrum** — pubblica una **Project status update** con:
   - sprint corrente (item e Story Points completati su totali, % completamento);
   - conteggio di scaduti, in scadenza, impediment aperti, item in corso;
   - mini-tabella **velocity** degli ultimi sprint.
+- **Kanban** — pubblica una status update di **flusso** con:
+  - **WIP** (item in lavorazione), **bloccati**, scaduti, in scadenza, impediment aperti;
+  - item **completati la settimana scorsa** e mini-tabella **throughput** delle ultime settimane.
 - **Stato** (badge della status update) derivato automaticamente:
   - `OFF_TRACK` se ci sono item scaduti;
-  - `AT_RISK` se ci sono impediment aperti o scadenze imminenti;
+  - `AT_RISK` se ci sono impediment aperti, item bloccati (Kanban) o scadenze imminenti;
   - `ON_TRACK` altrimenti.
 - **Dove si legge**: menu del progetto → *Status updates* (compare anche nella home del progetto).
 
-## 📈 Metriche / Velocity
+## 📈 Metriche / Velocity (Scrum) e Throughput (Kanban)
 
 - **File**: `scripts/project-metrics.mjs` + `.github/workflows/project-metrics.yml`.
-- **Cosa calcola**, per ogni iteration: Story Points previsti/completati, item previsti/completati,
+- **Scrum** — per ogni iteration: Story Points previsti/completati, item previsti/completati,
   % completamento; velocity media (SP completati) sugli ultimi sprint.
+- **Kanban** — per ogni settimana ISO: numero di item **completati** (throughput), con media
+  settimanale. Basato su `closedAt` (fallback `updatedAt`).
 - **Output (sempre due forme):**
-  1. **Visivo** — sezione **📈 Velocity** nel **README del progetto**, con barre proporzionali e tabella.
-  2. **Dati grezzi** — file **`metrics/velocity.csv`** committato nel repo (storicizzabile, importabile in Excel/BI).
-- Il README riporta anche il link diretto al CSV. La stessa velocity compare in forma sintetica nel digest settimanale.
+  1. **Visivo** — sezione **📈 Velocity** (Scrum) o **📈 Throughput** (Kanban) nel **README del
+     progetto**, con barre proporzionali e tabella.
+  2. **Dati grezzi** — CSV committato nel repo: **`metrics/velocity.csv`** (Scrum) e
+     **`metrics/throughput.csv`** (Kanban), storicizzabili e importabili in Excel/BI.
+- Il README riporta anche il link diretto al CSV. La stessa metrica compare in forma sintetica nel
+  digest settimanale.
 
 ### Grafici interattivi (Insights) — setup UI una-tantum
 Le **Insights** dei Project non sono configurabili via API: si impostano dalla UI (e vengono
@@ -47,6 +59,10 @@ ereditate dai progetti creati dal template). Per una velocity chart:
 3. Asse X: **Iteration**; Asse Y: **Sum** di **Story Points**.
 4. Filtro: `is:done` (o `Status:Done`) per la velocity dei soli completati.
 5. Salva con nome **Velocity**. Aggiungi una seconda chart *committed vs done* se utile.
+
+> **Kanban**: al posto della velocity per iteration, crea una chart di **throughput** — asse X
+> per **data di completamento** (o settimana) e conteggio degli item `is:done`, per visualizzare
+> quanti item vengono chiusi nel tempo.
 
 ## Credenziali e configurazione
 
@@ -70,7 +86,7 @@ guide (che fanno da "sotto-pagine" di dettaglio). Il README segue il flusso: inf
 
 | File | Ruolo |
 |------|-------|
-| `scripts/lib/projects.mjs` | Helper condivisi (GraphQL, item, iteration, README) |
-| `scripts/project-digest.mjs` | Digest → status update |
-| `scripts/project-metrics.mjs` | Velocity → README + CSV |
+| `scripts/lib/projects.mjs` | Helper condivisi (GraphQL, item, iteration, throughput, README) |
+| `scripts/project-digest.mjs` | Digest → status update (Scrum/Kanban) |
+| `scripts/project-metrics.mjs` | Velocity (Scrum) / Throughput (Kanban) → README + CSV |
 | `metrics/velocity.csv` | Dati grezzi velocity |

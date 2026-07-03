@@ -28,7 +28,10 @@ export const CONFIG = {
     alert: '🚨 Alert',
   },
   doneStatuses: ['Done', 'Removed'],
-  inProgressStatuses: ['In Progress', 'Ready for qa'],
+  // In Progress + In Review (Kanban) + Ready for qa (Scrum): lavorazione attiva / WIP.
+  inProgressStatuses: ['In Progress', 'Ready for qa', 'In Review'],
+  // Stato "bloccato" (Kanban).
+  blockedStatuses: ['Blocked'],
   impedimentTypes: ['Impediment'],
   bugTypes: ['Bug'],
   dueSoonDays: 3,
@@ -305,4 +308,41 @@ export function velocityByIteration(items, fields) {
   }
   rows.sort((a, b) => a.start - b.start);
   return rows;
+}
+
+// ---- Metodo del progetto: Scrum (ha il campo Iteration) o Kanban (flusso continuo) ----
+export function projectMethod(fields) {
+  return fields[CONFIG.fieldNames.iteration] ? 'scrum' : 'kanban';
+}
+
+// Inizio settimana ISO (lunedì) in UTC.
+export function startOfWeekUTC(d = startOfTodayUTC()) {
+  const x = new Date(d);
+  const dow = (x.getUTCDay() + 6) % 7; // lunedì = 0
+  x.setUTCDate(x.getUTCDate() - dow);
+  x.setUTCHours(0, 0, 0, 0);
+  return x;
+}
+
+// ---- Throughput per settimana (metrica di flusso Kanban) ----
+// Conta gli item completati (chiusi/Done) per settimana ISO nelle ultime N settimane,
+// in base a closedAt (fallback updatedAt). Ritorna righe ordinate dalla piu vecchia.
+export function throughputByWeek(items, weeks = 6, today = startOfTodayUTC()) {
+  const thisWeekStart = startOfWeekUTC(today);
+  const buckets = [];
+  for (let i = weeks - 1; i >= 0; i--) {
+    const start = new Date(thisWeekStart.getTime() - i * 7 * 86400000);
+    const end = new Date(start.getTime() + 7 * 86400000);
+    buckets.push({ start, end, completed: 0 });
+  }
+  const first = buckets[0].start;
+  for (const it of items) {
+    if (!isDone(it)) continue;
+    const when = it.closedAt || it.updatedAt;
+    if (!when) continue;
+    const t = new Date(when);
+    if (t < first) continue;
+    for (const b of buckets) { if (t >= b.start && t < b.end) { b.completed++; break; } }
+  }
+  return buckets.map(b => ({ label: isoDate(b.start), start: b.start, end: b.end, completed: b.completed }));
 }

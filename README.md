@@ -22,7 +22,8 @@ scripts/                        # logica delle automazioni (Node 20, zero dipend
 ├─ project-metrics.mjs          # esporta velocity/throughput per iteration
 └─ lib/projects.mjs             # funzioni condivise (GraphQL, helper Project)
 metrics/
-└─ velocity.csv                 # storico velocity generato dalle automazioni
+├─ velocity.csv                 # storico velocity (progetti Scrum) generato dalle automazioni
+└─ throughput.csv               # storico throughput settimanale (progetti Kanban)
 docs/                           # guide operative (indice in fondo a questo README)
 README.md                       # questo file
 ```
@@ -143,7 +144,7 @@ eseguiti dai workflow schedulati in `.github/workflows/`:
 |--------|----------|---------|
 | `project-alerts.mjs` | `project-alerts.yml` | Aggiorna il campo `🚨 Alert` sugli item dei Project in base a un set di regole adattato al metodo (Scrum/Kanban): item scaduti, bug critici, impediment, bloccati, ecc. |
 | `project-digest.mjs` | `project-digest.yml` | Pubblica un **digest settimanale** come *status update* del Project |
-| `project-metrics.mjs` | `project-metrics.yml` | Esporta **velocity/throughput** per iteration in `metrics/velocity.csv` e nel README del progetto |
+| `project-metrics.mjs` | `project-metrics.yml` | Esporta **velocity** (Scrum) o **throughput** settimanale (Kanban) per progetto nel README e in `metrics/velocity.csv` / `metrics/throughput.csv` |
 
 La logica condivisa (client GraphQL, helper sui Project) sta in `scripts/lib/projects.mjs`. Tutte le
 automazioni usano il secret **`PROJECTS_TOKEN`** (vedi *Requisiti tecnici*).
