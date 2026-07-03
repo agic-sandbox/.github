@@ -18,7 +18,7 @@ Spike), ma con i **soli campi essenziali**:
 | File | Tipo | Campi |
 |------|------|-------|
 | `1-epic.yml` | Epic | Obiettivo/Visione · Valore atteso |
-| `2-feature.yml` | Feature | Obiettivo · Valore di business · Epic di riferimento (opz.) |
+| `2-feature.yml` | Feature | Obiettivo · Valore di business |
 | `3-user-story.yml` | User story | Description · Acceptance criteria |
 | `4-task.yml` | Task | Descrizione attività · Checklist (opz.) |
 | `5-bug.yml` | Bug | Repro steps · Comportamento attuale · Comportamento atteso |
