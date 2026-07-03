@@ -73,9 +73,9 @@ ereditate dai progetti creati dal template). Per una velocity chart:
 
 ## Descrizione nei progetti
 Il comando `setup` (vedi [guida 04](04-project-alerts.md)) scrive nel README di ogni progetto una
-sezione **⚙️ Automazioni & impostazioni** che riassume Alert, Digest e Velocity con i link a queste
-guide (che fanno da "sotto-pagine" di dettaglio). Il README segue il flusso: info progetto → 📈 Velocity
-→ ⚙️ impostazioni, per restare leggibile.
+sezione **⚙️ Automazioni & impostazioni** che riassume Alert, Digest e metriche (Velocity per Scrum,
+Throughput per Kanban) con i link a queste guide (che fanno da "sotto-pagine" di dettaglio). Il README
+segue il flusso: info progetto → 📈 metrica → ⚙️ impostazioni, per restare leggibile.
 
 ## Limiti noti
 - Insights/viste: gestibili **solo da UI**, nessuna API.
@@ -89,4 +89,5 @@ guide (che fanno da "sotto-pagine" di dettaglio). Il README segue il flusso: inf
 | `scripts/lib/projects.mjs` | Helper condivisi (GraphQL, item, iteration, throughput, README) |
 | `scripts/project-digest.mjs` | Digest → status update (Scrum/Kanban) |
 | `scripts/project-metrics.mjs` | Velocity (Scrum) / Throughput (Kanban) → README + CSV |
-| `metrics/velocity.csv` | Dati grezzi velocity |
+| `metrics/velocity.csv` | Dati grezzi velocity (progetti Scrum) |
+| `metrics/throughput.csv` | Dati grezzi throughput settimanale (progetti Kanban) |
