@@ -37,7 +37,7 @@ riceve al massimo un alert, quello piu importante). Gli item in stato chiuso (`D
 | # | Alert | Colore | Metodo | Condizione | Soglia (default) |
 |---|-------|--------|--------|-----------|------------------|
 | 1 | 🔴 Scaduto | rosso | tutti | Item aperto con `Target date` < oggi | — |
-| 2 | 🔴 Bug critico aperto | rosso | tutti | Tipo Bug + `Severity` critica + stato non iniziato | Severity in Critical/High/Blocker |
+| 2 | 🔴 Bug critico aperto | rosso | tutti | Tipo Bug + `Severity` critica + stato non iniziato | Severity in 1 - Critical / 2 - High |
 | 3 | 🔴 Impediment bloccante | rosso | tutti | Tipo Impediment aperto da troppo tempo | > 3 giorni |
 | 4 | 🔴 Bloccato | rosso | Kanban | Stato `Blocked` senza aggiornamenti da troppo tempo | > 2 giorni |
 | 5 | 🟠 In scadenza | arancio | tutti | `Target date` entro pochi giorni | <= 3 giorni |

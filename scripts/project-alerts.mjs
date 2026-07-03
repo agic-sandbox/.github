@@ -43,10 +43,10 @@ const CONFIG = {
   doneStatuses: ['Done', 'Removed'],
   // Stati "bloccato" (Kanban): item fermo per un ostacolo
   blockedStatuses: ['Blocked'],
-  // Valori di Priority considerati "alti"
-  highPriorityValues: ['P0', 'P1', 'Urgent', 'High'],
-  // Valori di Severity considerati "critici"
-  criticalSeverityValues: ['Critical', 'High', 'Blocker'],
+  // Valori di Priority considerati "alti" (valori reali org: Urgent/High; fallback generici inclusi)
+  highPriorityValues: ['Urgent', 'High', 'P0', 'P1'],
+  // Valori di Severity considerati "critici" (valori reali org: "1 - Critical"/"2 - High"; fallback generici inclusi)
+  criticalSeverityValues: ['1 - Critical', '2 - High', 'Critical', 'High', 'Blocker'],
 
   // --- Mappatura "tipo" item (Issue Type nativo o, in fallback, label) ---
   bugTypes: ['Bug'],
